@@ -16,11 +16,13 @@ Switch demo via URL (i "Tweaks" del prototipo): `?role=trainer`, `?credits=0`, `
 
 ## Stato
 - Dati e stato sono **locali e di esempio** (cliente Francesca, altri clienti, Sara/Marta, orari, esercizi, regole). Nessun backend: si azzera al refresh.
+- Studio (staff) personalizzabile: regole di prenotazione (cancellazione, penale, limite settimanale, lista d'attesa…), tipi di corso (nome, colore, posti, durata) e team (ruoli, corsi, incarichi, permessi). Le impostazioni restano salvate sul dispositivo; "Ripristina impostazioni iniziali" le azzera.
 - Font self-hosted (Fontsource), nessuna chiamata a Google Fonts.
 - Logo a bassa risoluzione: serve il vettoriale (SVG/PDF/AI).
 
 ## Struttura
 - `src/data.js` — costanti e dati di esempio
 - `src/logic.js` — stato e regole (prenotazioni, lista d'attesa, rinnovi, agenda, piani)
+- `src/studio.js` — impostazioni Studio: regole, corsi, team
 - `src/screens/` — schermate cliente, trainer, bottom sheet
 - `src/components/ds.jsx` — Button, Icon (Lucide), ServicePill, BrandRule dal design system

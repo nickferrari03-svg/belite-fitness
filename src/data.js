@@ -16,7 +16,7 @@ export const MEAS=[['w','PESO','kg',0.1],['v','VITA','cm',0.5],['h','FIANCHI','c
 export const TEAM=[['Andrea','Titolare · Personal trainer'],['Sara','Pilates Reformer e Matwork'],['Marta','Yoga']];
 let NID=0;
 export const mk=(icon,t,b,time,go)=>({id:++NID,icon:icon,t:t,b:b,time:time,go:go||{},read:false});
-export const ini=n=>n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+export const ini=n=>{const w=n.trim().split(/\s+/);return (w.length>1?w[0][0]+w[1][0]:w[0].slice(0,2)).toUpperCase();};
 export const fmt=x=>(Math.round(x*10)/10).toFixed(1).replace('.',',');
 export const sgn=x=>Math.abs(x)<0.05?'±0':(x>0?'+':'−')+fmt(Math.abs(x));
 export const initPlan=i=>{const s=(i*2)%LIB.length;return [0,1,2,3,4].map(k=>{const e=LIB[(s+k)%LIB.length];return {name:e[0],sets:k===4?1:3,reps:e[1]};});};
@@ -24,3 +24,23 @@ export const det=e=>e.sets+' × '+e.reps;
 export const ck=on=>({ring:on?'#2486AB':'#6B7479',fill:on?'#2486AB':'transparent',tick:on?'#fff':'transparent'});
 export const lc=on=>({bg:on?'#2486AB':'#fff',fg:on?'#fff':'#0B0D0F',bd:on?'#2486AB':'rgba(11,13,15,.14)'});
 export const dayShort=d=>DAYS[d].full.split(' ').slice(0,2).join(' ');
+
+// Studio configuration: everything the owner can customise from Studio. Saved on the device.
+export const OWNER_ID='t1';
+export const BASE_TRAINER={Andrea:'t1',Sara:'t2',Marta:'t3'};
+export const SERVICES=[['pt','Personal Training'],['fisio','Fisioterapia'],['osteo','Osteopatia'],['nutri','Nutrizione'],['recep','Reception'],['admin','Amministrazione']];
+export const PERMS=[['agenda','Gestisce l’agenda','Aggiunge, sposta e annulla corsi'],['clients','Vede tutti i clienti','Schede, pacchetti e progressi'],['plans','Modifica i piani','Esercizi e note per i clienti'],['renew','Conferma i rinnovi','Aggiunge lezioni ai pacchetti']];
+export const PALETTE=['#A9D2E8','#3F9CC4','#E7B6F0','#F3C98B','#9FD8B5','#F2A7A0','#C9C2F2','#BFC5C8'];
+export const DEFAULT_CFG={
+  types:{reformer:{name:'Pilates Reformer',color:'#A9D2E8',cap:2,dur:50},matwork:{name:'Pilates Matwork',color:'#3F9CC4',cap:4,dur:50},yoga:{name:'Yoga',color:'#E7B6F0',cap:4,dur:60}},
+  team:[{id:'t1',name:'Andrea',role:'Titolare · Personal trainer',owner:true,tasks:['reformer','matwork','pt'],perms:{agenda:1,clients:1,plans:1,renew:1}},
+    {id:'t2',name:'Sara',role:'Istruttrice Pilates',tasks:['reformer','matwork'],perms:{agenda:1,plans:1}},
+    {id:'t3',name:'Marta',role:'Insegnante Yoga',tasks:['yoga'],perms:{agenda:1}}],
+  extraTasks:[],
+  rules:{cancel:24,latePenalty:true,waitOn:true,wait:30,maxWeek:4,minBefore:2,bookAhead:14},
+};
+export const shortName=n=>n.replace(/^Pilates\s+/i,'');
+const CFG_KEY='belite.studio.v1';
+export const loadCfg=()=>{try{const s=JSON.parse(localStorage.getItem(CFG_KEY));if(s&&s.types&&s.team&&s.rules)return Object.assign({},DEFAULT_CFG,s,{rules:Object.assign({},DEFAULT_CFG.rules,s.rules)});}catch{/* storage unavailable */}return DEFAULT_CFG;};
+export const saveCfg=c=>{try{localStorage.setItem(CFG_KEY,JSON.stringify(c));}catch{/* storage unavailable */}};
+export const clearCfg=()=>{try{localStorage.removeItem(CFG_KEY);}catch{/* storage unavailable */}};

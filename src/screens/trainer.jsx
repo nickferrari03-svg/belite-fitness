@@ -57,7 +57,7 @@ function BackBtn({ onClick }) {
 export function Oggi({ v }) {
   return (
     <div style={page(24)}>
-      <Header meta="Lunedì 28 settembre" title="Buongiorno, Andrea" />
+      <Header meta="Lunedì 28 settembre" title={`Buongiorno, ${v.ownerName}`} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,minmax(0,1fr))', gap: 8 }}>
         {v.kpis.map(k => (
           <div key={k.l} style={{ ...card12, padding: '14px 12px' }}>
@@ -180,7 +180,7 @@ export function Clienti({ v }) {
       <Header meta={`${v.clientCount} attivi`} title="Clienti" />
       <label style={{ display: 'flex', alignItems: 'center', gap: 10, height: 48, padding: '0 16px', borderRadius: 999, background: '#fff', boxShadow: '0 2px 10px rgba(36,134,171,.08)' }}>
         <Icon name="search" size={18} color="#6B7479" />
-        <input value={v.q} onChange={v.onQ} placeholder="Cerca un cliente" aria-label="Cerca un cliente" style={{ flex: 1, minWidth: 0, border: 0, outline: 'none', background: 'transparent', font: `500 15px ${MS}`, color: '#0B0D0F' }} />
+        <input value={v.q} onChange={v.onQ} placeholder="Cerca un cliente" aria-label="Cerca un cliente" style={{ flex: 1, minWidth: 0, border: 0, outline: 'none', background: 'transparent', font: `500 16px ${MS}`, color: '#0B0D0F' }} />
       </label>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {v.cfilters.map(f => <Chip key={f.label} c={f} />)}
@@ -288,55 +288,103 @@ export function PlanEditor({ v }) {
       </div>
       <label style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         <span style={caps('#6B7479')}>NOTA PER {cd.firstUpper}</span>
-        <textarea value={v.draftNote} onChange={v.onNote} rows={3} style={{ borderRadius: 12, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', padding: 12, font: `500 14px/1.45 ${MS}`, resize: 'none', outline: 'none' }} />
+        <textarea value={v.draftNote} onChange={v.onNote} rows={3} style={{ borderRadius: 12, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', padding: 12, font: `500 16px/1.45 ${MS}`, resize: 'none', outline: 'none' }} />
       </label>
       <Button variant="primary" size="lg" onClick={v.saveDraft} style={{ width: '100%', justifyContent: 'center' }}>{cd.saveLabel}</Button>
     </div>
   )
 }
 
+export function Toggle({ on, onToggle, label, locked }) {
+  return (
+    <button role="switch" aria-checked={on} aria-label={label} onClick={onToggle} disabled={locked} style={{ width: 52, height: 32, borderRadius: 999, border: 0, padding: 3, flex: 'none', cursor: locked ? 'default' : 'pointer', opacity: locked ? 0.55 : 1, background: on ? '#2486AB' : 'rgba(11,13,15,.16)', transition: 'background .24s ease-out', display: 'flex', justifyContent: on ? 'flex-end' : 'flex-start' }}>
+      <span style={{ width: 26, height: 26, borderRadius: 999, background: '#fff', boxShadow: '0 1px 3px rgba(0,0,0,.2)' }} />
+    </button>
+  )
+}
+
+export function SettingRow({ r, last }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', minHeight: 48, borderBottom: last ? 0 : divider }}>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ font: `700 14px ${MS}` }}>{r.label}</div>
+        <div style={muted}>{r.sub}</div>
+      </div>
+      {r.kind === 'toggle'
+        ? <Toggle on={r.on} onToggle={r.onToggle} label={r.label} locked={r.locked} />
+        : <Stepper val={r.val} onMinus={r.onMinus} onPlus={r.onPlus} minWidth={46} />}
+    </div>
+  )
+}
+
+function SectionHead({ title, action }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+      <span style={h2}>{title}</span>
+      {action && <button onClick={action.onClick} style={{ border: 0, background: 'none', color: '#2486AB', font: `700 13px ${MS}`, cursor: 'pointer', padding: '12px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Icon name="plus" size={16} color="#2486AB" />{action.label}</button>}
+    </div>
+  )
+}
+
 export function Studio({ v }) {
+  const rowBtn = { display: 'flex', alignItems: 'center', gap: 12, width: '100%', padding: '12px 0', border: 0, background: 'none', color: '#0B0D0F', textAlign: 'left', cursor: 'pointer' }
   return (
     <div style={page(22)}>
       <Header meta="Impostazioni" title="Studio" />
       <div style={{ display: 'flex', gap: 14, alignItems: 'center', ...card12, padding: '14px 16px' }}>
-        <div style={{ width: 48, height: 48, borderRadius: 999, background: '#2486AB', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 22px/1 ${BEBAS}`, flex: 'none' }}>AN</div>
-        <div>
-          <div style={{ font: `700 16px ${MS}` }}>Andrea</div>
-          <div style={muted}>Titolare · Personal trainer</div>
+        <div style={{ width: 48, height: 48, borderRadius: 999, background: '#2486AB', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 22px/1 ${BEBAS}`, flex: 'none' }}>{v.owner.init}</div>
+        <div style={{ minWidth: 0 }}>
+          <div style={{ font: `700 16px ${MS}` }}>{v.owner.name}</div>
+          <div style={muted}>{v.owner.role}</div>
         </div>
       </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <span style={h2}>Regole di prenotazione</span>
+        <SectionHead title="Regole di prenotazione" />
         <div style={{ ...card20, padding: '4px 16px' }}>
-          {v.ruleRows.map(r => (
-            <div key={r.label} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 0', borderBottom: divider }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ font: `700 14px ${MS}` }}>{r.label}</div>
-                <div style={muted}>{r.sub}</div>
-              </div>
-              <Stepper val={r.val} onMinus={r.onMinus} onPlus={r.onPlus} minWidth={52} />
-            </div>
-          ))}
+          {v.ruleRows.map((r, i) => <SettingRow key={r.label} r={r} last={i === v.ruleRows.length - 1} />)}
         </div>
         <div style={{ font: `500 12px ${MS}`, color: '#6B7479' }}>Le regole si applicano subito a orari e prenotazioni dei clienti.</div>
       </div>
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <span style={h2}>Team</span>
+        <SectionHead title="Corsi" action={{ label: 'Nuovo', onClick: v.addType }} />
         <div style={{ ...card20, padding: '4px 16px' }}>
-          {v.team.map(m => (
-            <div key={m.name} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0', borderBottom: divider }}>
-              <div style={{ width: 36, height: 36, borderRadius: 999, background: '#EEF7FB', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 16px/1 ${BEBAS}`, flex: 'none' }}>{m.init}</div>
+          {v.typeRows.map((t, i) => (
+            <button key={t.key} onClick={t.onOpen} style={{ ...rowBtn, borderBottom: i === v.typeRows.length - 1 ? 0 : divider }}>
+              <span style={{ width: 14, height: 14, borderRadius: 4, background: t.color, flex: 'none' }} />
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ font: `700 14px ${MS}` }}>{m.name}</div>
-                <div style={muted}>{m.role}</div>
+                <div style={{ font: `700 14px ${MS}` }}>{t.name}</div>
+                <div style={muted}>{t.sub}</div>
               </div>
-              <span style={{ font: `600 12px ${MS}`, color: '#6B7479' }}>{m.count} corsi/sett.</span>
-            </div>
+              <Icon name="chevron-right" size={16} color="#BFC5C8" />
+            </button>
           ))}
         </div>
       </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <SectionHead title="Team" action={{ label: 'Aggiungi', onClick: v.addMember }} />
+        <div style={{ ...card20, padding: '4px 16px' }}>
+          {v.teamRows.map((m, i) => (
+            <button key={m.id} onClick={m.onOpen} style={{ ...rowBtn, borderBottom: i === v.teamRows.length - 1 ? 0 : divider }}>
+              <div style={{ width: 40, height: 40, borderRadius: 999, background: m.owner ? '#2486AB' : '#EEF7FB', color: m.owner ? '#fff' : '#0B0D0F', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 17px/1 ${BEBAS}`, flex: 'none' }}>{m.init}</div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, justifyContent: 'space-between' }}>
+                  <span style={{ font: `700 14px ${MS}`, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.name}</span>
+                  <span style={{ font: `600 11px ${MS}`, color: '#6B7479', flex: 'none' }}>{m.count} corsi/sett.</span>
+                </div>
+                <div style={muted}>{m.role}</div>
+                <div style={{ font: `600 11px/1.4 ${MS}`, color: '#1E7194', marginTop: 4 }}>{m.tasks}</div>
+              </div>
+              <Icon name="chevron-right" size={16} color="#BFC5C8" />
+            </button>
+          ))}
+        </div>
+      </div>
+
       <button onClick={v.toClient} style={{ ...outlineDark, width: '100%' }}>Vista cliente</button>
+      <button onClick={v.resetCfg} style={{ alignSelf: 'center', border: 0, background: 'none', color: '#6B7479', font: `600 12px ${MS}`, cursor: 'pointer', padding: 12 }}>Ripristina impostazioni iniziali</button>
     </div>
   )
 }

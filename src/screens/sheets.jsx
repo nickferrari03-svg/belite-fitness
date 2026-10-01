@@ -1,7 +1,7 @@
 // Bottom sheets (class, renew, measures, manage class, new class) plus waitlist offer and toast.
 import { Icon, Button } from '../components/ds.jsx'
 import { Check, caps } from './client.jsx'
-import { Chip } from './trainer.jsx'
+import { Chip, SettingRow, Stepper } from './trainer.jsx'
 
 const MS = 'Montserrat,sans-serif'
 const BEBAS = "'Bebas Neue',sans-serif"
@@ -43,7 +43,7 @@ function ClassSheet({ v }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 12px', font: `500 14px ${MS}` }}>
         <div><div style={field('#BFC5C8')}>QUANDO</div>{sh.day}, {sh.dtime}</div>
         <div><div style={field('#BFC5C8')}>ISTRUTTORE</div>{sh.trainer}</div>
-        <div><div style={field('#BFC5C8')}>DURATA</div>50 minuti</div>
+        <div><div style={field('#BFC5C8')}>DURATA</div>{sh.durLabel}</div>
         <div>
           <div style={field('#BFC5C8')}>POSTI · {sh.spotsLabel}</div>
           <div style={{ display: 'flex', gap: 6 }}>
@@ -117,6 +117,10 @@ function ManageSheet({ v }) {
       {sh.showMove && (
         <>
           <div style={col(10)}>
+            <div style={caps('#6B7479')}>ISTRUTTORE</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{sh.trainers.map(t => <Chip key={t.label} c={t} />)}</div>
+          </div>
+          <div style={col(10)}>
             <div style={caps('#6B7479')}>SPOSTA ORARIO</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{sh.moves.map(t => <Chip key={t.label} c={t} />)}</div>
             <div style={{ font: `500 12px ${MS}`, color: '#6B7479' }}>Gli iscritti ricevono una notifica del nuovo orario.</div>
@@ -154,8 +158,98 @@ function AddSheet({ v }) {
       {group('GIORNO', v.addDays)}
       {group('TIPO', v.addTypes)}
       {group('ORARIO', v.addTimes)}
+      {group('ISTRUTTORE', v.addTrainers)}
       <SheetError v={v} light />
       <Button variant="primary" size="lg" onClick={v.addClass} style={full}>{v.addLabel}</Button>
+    </div>
+  )
+}
+
+const input = { height: 48, borderRadius: 12, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', padding: '0 14px', font: `500 16px ${MS}`, outline: 'none', width: '100%', boxSizing: 'border-box' }
+
+function Field({ label, children }) {
+  return (
+    <label style={col(8)}>
+      <span style={caps('#6B7479')}>{label}</span>
+      {children}
+    </label>
+  )
+}
+
+function MemberSheet({ v }) {
+  const m = v.md
+  return (
+    <div style={col(18)}>
+      <Head light onClose={v.closeSheet}><div style={{ font: `700 26px/1.1 ${MS}` }}>{m.title}</div></Head>
+      <Field label="NOME">
+        {m.isOwner
+          ? <div style={{ ...input, display: 'flex', alignItems: 'center', background: '#EEF7FB' }}>{m.name}<span style={{ marginLeft: 'auto', font: `600 12px ${MS}`, color: '#6B7479' }}>Titolare</span></div>
+          : <input value={m.name} onChange={m.onName} placeholder="Es. Laura" style={input} />}
+      </Field>
+      <Field label="RUOLO">
+        <input value={m.role} onChange={m.onRole} placeholder="Es. Istruttrice Pilates" style={input} />
+      </Field>
+      <div style={col(10)}>
+        <div style={caps('#6B7479')}>CORSI CHE PUÒ TENERE</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{m.classChips.map(c => <Chip key={c.label} c={c} />)}</div>
+      </div>
+      <div style={col(10)}>
+        <div style={caps('#6B7479')}>ALTRI INCARICHI</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{m.serviceChips.map(c => <Chip key={c.label} c={c} />)}</div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input value={m.newTask} onChange={m.onNewTask} onKeyDown={e => { if (e.key === 'Enter') m.addTask() }} placeholder="Altro incarico…" aria-label="Nuovo incarico" style={{ ...input, flex: 1, minWidth: 0, borderRadius: 999 }} />
+          <button onClick={m.addTask} aria-label="Aggiungi incarico" style={{ width: 48, height: 48, borderRadius: 999, border: 0, background: '#2486AB', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}><Icon name="plus" size={18} color="#fff" /></button>
+        </div>
+      </div>
+      <div style={col(4)}>
+        <div style={caps('#6B7479')}>PERMESSI NELL’APP</div>
+        <div>{m.perms.map((r, i) => <SettingRow key={r.label} r={r} last={i === m.perms.length - 1} />)}</div>
+        {m.isOwner && <div style={{ font: `500 12px ${MS}`, color: '#6B7479' }}>Il titolare ha sempre tutti i permessi.</div>}
+      </div>
+      <SheetError v={v} light />
+      {!m.confirming && (
+        <>
+          <Button variant="primary" size="lg" onClick={m.save} style={full}>Salva</Button>
+          {m.canRemove && <button onClick={m.askRemove} style={outlineDark}>Rimuovi dal team</button>}
+        </>
+      )}
+      {m.confirming && (
+        <>
+          <div style={{ font: `500 14px/1.45 ${MS}` }}>{m.removeText}</div>
+          <Button variant="primary" size="lg" onClick={m.remove} style={full}>Conferma rimozione</Button>
+          <Button variant="ghost" size="lg" onClick={m.backRemove} style={full}>Indietro</Button>
+        </>
+      )}
+    </div>
+  )
+}
+
+function TypeSheet({ v }) {
+  const t = v.td
+  const row = { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, minHeight: 48, borderBottom: '1px solid rgba(11,13,15,.08)' }
+  return (
+    <div style={col(18)}>
+      <Head light onClose={v.closeSheet}><div style={{ font: `700 26px/1.1 ${MS}` }}>{t.title}</div></Head>
+      <Field label="NOME">
+        <input value={t.name} onChange={t.onName} placeholder="Es. Pilates Tower" style={input} />
+      </Field>
+      <div style={col(10)}>
+        <div style={caps('#6B7479')}>COLORE IN AGENDA</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+          {t.swatches.map(c => (
+            <button key={c.color} onClick={c.onPick} aria-label={'Colore ' + c.color} aria-pressed={c.on} style={{ width: 44, height: 44, borderRadius: 999, cursor: 'pointer', background: c.color, border: c.on ? '3px solid #0B0D0F' : '3px solid #fff', boxShadow: '0 0 0 1px rgba(11,13,15,.14)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {c.on && <Icon name="check" size={18} color="#0B0D0F" />}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div>
+        <div style={row}><span style={{ font: `700 14px ${MS}` }}>Posti per lezione</span><Stepper val={t.cap.val} onMinus={t.cap.onMinus} onPlus={t.cap.onPlus} minWidth={46} /></div>
+        <div style={{ ...row, borderBottom: 0 }}><span style={{ font: `700 14px ${MS}` }}>Durata</span><Stepper val={t.dur.val} onMinus={t.dur.onMinus} onPlus={t.dur.onPlus} minWidth={60} /></div>
+      </div>
+      <SheetError v={v} light />
+      <Button variant="primary" size="lg" onClick={t.save} style={full}>Salva</Button>
+      {t.canDelete && <button onClick={t.remove} style={outlineDark}>Elimina corso</button>}
     </div>
   )
 }
@@ -172,6 +266,8 @@ export function Sheet({ v }) {
         {v.isMeasureSheet && <MeasureSheet v={v} />}
         {v.isManageSheet && <ManageSheet v={v} />}
         {v.isAddSheet && <AddSheet v={v} />}
+        {v.isMemberSheet && v.md && <MemberSheet v={v} />}
+        {v.isTypeSheet && v.td && <TypeSheet v={v} />}
       </div>
     </>
   )
