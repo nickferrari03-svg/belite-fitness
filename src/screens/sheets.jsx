@@ -101,6 +101,58 @@ function MeasureSheet({ v }) {
 const outlineDark = { minHeight: 48, borderRadius: 999, border: '2px solid #0B0D0F', background: 'transparent', color: '#0B0D0F', font: `700 13px ${MS}`, letterSpacing: '.08em', textTransform: 'uppercase', cursor: 'pointer', padding: '0 18px', width: '100%' }
 const full = { width: '100%', justifyContent: 'center' }
 
+function Roster({ sh }) {
+  const avatar = { width: 36, height: 36, borderRadius: 999, background: '#EEF7FB', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 16px/1 ${BEBAS}`, flex: 'none' }
+  const row = { display: 'flex', alignItems: 'center', gap: 12, minHeight: 52, borderBottom: '1px solid rgba(11,13,15,.08)' }
+  return (
+    <div style={col(8)}>
+      <div style={caps('#6B7479')}>{sh.rosterLabel}</div>
+      <div>
+        {sh.people.map(p => (
+          <div key={p.name} style={row}>
+            <div style={avatar}>{p.init}</div>
+            <span style={{ flex: 1, minWidth: 0, font: `600 14px ${MS}` }}>{p.name}{p.you && <span style={{ font: `500 12px ${MS}`, color: '#6B7479' }}> · dall’app</span>}</span>
+            <button onClick={p.onRemove} aria-label={'Rimuovi ' + p.name} style={{ height: 36, padding: '0 12px', borderRadius: 999, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', font: `600 12px ${MS}`, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, flex: 'none' }}>
+              <Icon name="x" size={14} color="#0B0D0F" />Rimuovi
+            </button>
+          </div>
+        ))}
+        {!sh.people.length && <div style={{ padding: '10px 0', font: `500 13px ${MS}`, color: '#6B7479' }}>Ancora nessun iscritto.</div>}
+      </div>
+      {!sh.addOpen && (
+        sh.canAdd
+          ? <button onClick={sh.onAddOpen} style={{ alignSelf: 'flex-start', minHeight: 44, padding: '0 16px', borderRadius: 999, border: 0, background: '#EEF7FB', color: '#1E7194', font: `700 13px ${MS}`, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}><Icon name="user-plus" size={16} color="#1E7194" />Aggiungi cliente</button>
+          : <div style={{ font: `500 12px ${MS}`, color: '#6B7479' }}>Lezione completa: rimuovi un iscritto o aumenta i posti del corso in Studio.</div>
+      )}
+      {sh.addOpen && (
+        <div style={{ ...col(8), padding: 12, borderRadius: 12, background: '#EEF7FB' }}>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8, height: 44, padding: '0 14px', borderRadius: 999, background: '#fff' }}>
+              <Icon name="search" size={16} color="#6B7479" />
+              <input autoFocus value={sh.addQ} onChange={sh.onAddQ} onKeyDown={e => { if (e.key === 'Enter' && sh.newName) sh.onAddNew() }} placeholder="Cerca o scrivi un nome" aria-label="Cerca cliente" style={{ flex: 1, minWidth: 0, border: 0, outline: 'none', background: 'transparent', font: `500 16px ${MS}`, color: '#0B0D0F' }} />
+            </div>
+            <button onClick={sh.onAddClose} aria-label="Chiudi ricerca" style={{ width: 44, height: 44, borderRadius: 999, border: 0, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}><Icon name="x" size={16} color="#0B0D0F" /></button>
+          </div>
+          {sh.candidates.map(c => (
+            <button key={c.name} onClick={c.onPick} style={{ ...row, borderBottom: 0, width: '100%', padding: '0 4px', border: 0, background: 'none', color: '#0B0D0F', cursor: 'pointer', textAlign: 'left' }}>
+              <div style={{ ...avatar, background: '#fff' }}>{c.init}</div>
+              <span style={{ flex: 1, font: `600 14px ${MS}` }}>{c.name}</span>
+              <Icon name="plus" size={18} color="#2486AB" />
+            </button>
+          ))}
+          {sh.newName && (
+            <button onClick={sh.onAddNew} style={{ ...row, borderBottom: 0, width: '100%', padding: '0 4px', border: 0, background: 'none', color: '#1E7194', cursor: 'pointer', textAlign: 'left', font: `700 14px ${MS}` }}>
+              <div style={{ ...avatar, background: '#2486AB' }}><Icon name="user-plus" size={16} color="#fff" /></div>
+              Aggiungi «{sh.newName}» come nuovo cliente
+            </button>
+          )}
+          {!sh.candidates.length && !sh.newName && <div style={{ padding: '6px 4px', font: `500 13px ${MS}`, color: '#6B7479' }}>Nessun cliente trovato. Scrivi nome e cognome per aggiungerne uno nuovo.</div>}
+        </div>
+      )}
+    </div>
+  )
+}
+
 function ManageSheet({ v }) {
   const sh = v.sh
   return (
@@ -111,11 +163,12 @@ function ManageSheet({ v }) {
       </Head>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '14px 12px', font: `600 14px ${MS}` }}>
         <div><div style={field('#6B7479')}>QUANDO</div>{sh.day}, {sh.dtime}</div>
-        <div><div style={field('#6B7479')}>ISCRITTI</div>{sh.taken} su {sh.cap} · {sh.trainer}</div>
+        <div><div style={field('#6B7479')}>DURATA · POSTI</div>{sh.dur} min · {sh.cap} posti</div>
       </div>
       <SheetError v={v} light />
       {sh.showMove && (
         <>
+          <Roster sh={sh} />
           <div style={col(10)}>
             <div style={caps('#6B7479')}>ISTRUTTORE</div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>{sh.trainers.map(t => <Chip key={t.label} c={t} />)}</div>

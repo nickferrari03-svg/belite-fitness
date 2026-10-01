@@ -1,6 +1,6 @@
 // App state and behaviour, ported from the v3 prototype's DC logic.
 import { Component } from 'react'
-import { DAYS, SLOTS, PLAN, ALL, LIB, TIMES, ADD_TIMES, CLIENTS, POOL, MEAS, mk, ini, fmt, sgn, initPlan, det, ck, lc, dayShort,
+import { DAYS, SLOTS, PLAN, ALL, LIB, TIMES, ADD_TIMES, CLIENTS, POOL, ME, pick, MEAS, mk, ini, fmt, sgn, initPlan, det, ck, lc, dayShort,
   OWNER_ID, BASE_TRAINER, shortName, loadCfg, saveCfg } from './data.js'
 import { studioVals } from './studio.js'
 
@@ -10,7 +10,7 @@ export class BeliteLogic extends Component {
     notifs:{client:[mk('bell-ring','Promemoria lezione','Pilates Reformer lunedì alle 12:30 con Andrea.','2 h',{tab:'home'}),mk('dumbbell','Piano aggiornato','Andrea ha aggiornato il tuo piano: settimana 6.','Ieri',{tab:'io',sub:'piano'}),mk('package','Il tuo pacchetto','Le tue lezioni sono valide fino al 31 dicembre.','3 g',{tab:'home'})],
       trainer:[mk('user-plus','Nuova prenotazione','Francesca C. · Pilates Reformer, lunedì 12:30.','10 min',{tab:'agenda'}),mk('calendar-x','Cancellazione','Marco B. ha annullato Reformer martedì 07:30.','1 h',{tab:'agenda'}),mk('circle-alert','Pacchetto in esaurimento','Elena F. ha 1 lezione rimasta.','Ieri',{tab:'clientDetail',client:2})]},
     waitlist:[],offer:null,now:0,raced:{},raceUsed:false,pending:false,sheetErr:null,confirmCancel:false,
-    cancelled:{},moved:{},added:[],addType:'reformer',addTime:'17:00',addTrainer:OWNER_ID,cfg:loadCfg(),trainerOf:{},mDraft:null,tDraft:null,confirmRemove:false,newTask:'',q:'',cfilter:'all',
+    cancelled:{},moved:{},added:[],addType:'reformer',addTime:'17:00',addTrainer:OWNER_ID,cfg:loadCfg(),trainerOf:{},rosterAdd:{},rosterDel:{},addOpen:false,addQ:'',mDraft:null,tDraft:null,confirmRemove:false,newTask:'',q:'',cfilter:'all',
     plans:{},notes:{0:'Ottimo controllo nel Roll Up. Questa settimana aumentiamo la tenuta del plank.'},draft:[],draftNote:'',
     renewPick:10,renewReq:null,measStart:{w:64.5,v:75,h:99},measNow:{w:62.4,v:71,h:96},measDate:'22 settembre',measDraft:null,loading:false};
   componentDidMount(){this._i=setInterval(()=>{const o=this.state.offer;if(!o)return;if(Date.now()>=o.end){this.setState(s=>({offer:null,waitlist:s.waitlist.filter(w=>w!==o.id)}));this.flash('Tempo scaduto · il posto è passato al prossimo');}else this.setState({now:Date.now()});},1000);}
@@ -31,13 +31,35 @@ export class BeliteLogic extends Component {
   dt(c){return this.state.moved[c.id]||c.time;}
   dayList(d){return PLAN[d].map(i=>ALL[d+'-'+SLOTS[i][0]]).concat(this.state.added.filter(a=>a.d===d)).filter(c=>this.typeOf(c.type)).sort((a,b)=>this.dt(a).localeCompare(this.dt(b)));}
   info(c){const st=this.state;const T=this.typeOf(c.type);const cap=T.cap;const tm=this.member(this.trainerId(c));const mine=st.booked.includes(c.id);const cancelled=!!st.cancelled[c.id];
-    let base=(st.raced[c.id]||c.full)?cap:(c.added?0:c.seed%cap);if(mine)base=Math.min(base,cap-1);const taken=base+(mine?1:0);const free=cap-taken;
+    let base=(st.raced[c.id]||c.full)?cap:(c.added?0:c.seed%cap);if(mine)base=Math.min(base,cap-1);
+    const del=st.rosterDel[c.id]||[];const others=pick(c.seed||0,base).filter(n=>!del.includes(n)).concat(st.rosterAdd[c.id]||[]);
+    const roster=(mine?[ME]:[]).concat(others);const taken=roster.length;const free=cap-taken;
     const status=cancelled?'cancelled':mine?'booked':free<=0?'full':'open';
-    return Object.assign({},c,{name:T.name,kind:shortName(T.name).toUpperCase(),color:T.color,dur:T.dur,trainer:tm.name,trainerId:tm.id,cap:cap,mine:mine,taken:taken,free:free,status:status,waiting:st.waitlist.includes(c.id),dtime:this.dt(c),day:dayShort(c.d),
+    return Object.assign({},c,{name:T.name,kind:shortName(T.name).toUpperCase(),color:T.color,dur:T.dur,trainer:tm.name,trainerId:tm.id,roster:roster,cap:cap,mine:mine,taken:taken,free:free,status:status,waiting:st.waitlist.includes(c.id),dtime:this.dt(c),day:dayShort(c.d),
       spotsLabel:cancelled?'Annullato':status==='full'?'Completo':free===1?'1 posto libero':free+' posti liberi'});}
   trainerChoices(type){const t=this.state.cfg.team;const fit=t.filter(m=>(m.tasks||[]).includes(type));return fit.concat(t.filter(m=>!fit.includes(m)));}
   reassign(id,mid){const m=this.member(mid);this.setState(s=>({trainerOf:Object.assign({},s.trainerOf,{[id]:mid})}));this.flash('Istruttore: '+m.name);}
-  openSheet(s){this.setState({sheet:s,sheetErr:null,confirmCancel:false,pending:false});}
+  openSheet(s){this.setState({sheet:s,sheetErr:null,confirmCancel:false,pending:false,addOpen:false,addQ:''});}
+  // Staff adds/removes a client from a class by hand (e.g. a phone booking).
+  enroll(id,raw){const st=this.state;const name=raw.trim().replace(/\s+/g,' ');if(!name)return;const i=this.info(this.get(id));
+    if(i.roster.some(n=>n.toLowerCase()===name.toLowerCase())){this.setState({sheetErr:name+' è già iscritto a questa lezione.'});return;}
+    if(i.free<=0){this.setState({sheetErr:'Lezione completa ('+i.cap+' posti). Libera un posto o aumenta i posti del corso in Studio.'});return;}
+    if(name===ME){if(this.credits()<=0){this.setState({sheetErr:ME+' non ha lezioni nel pacchetto: conferma prima un rinnovo.'});return;}
+      this.setState(s=>({booked:s.booked.concat(id),used:s.used+1,waitlist:s.waitlist.filter(w=>w!==id),offer:s.offer&&s.offer.id===id?null:s.offer,addQ:'',addOpen:false,sheetErr:null}));
+      this.push('client','calendar-plus','Prenotazione dallo studio','Lo studio ti ha prenotato '+i.name+', '+i.day+' '+i.dtime+'.',{tab:'home'});}
+    else{const del=st.rosterDel[id]||[];
+      if(del.includes(name))this.setState(s=>({rosterDel:Object.assign({},s.rosterDel,{[id]:del.filter(n=>n!==name)}),addQ:'',addOpen:false,sheetErr:null}));
+      else this.setState(s=>({rosterAdd:Object.assign({},s.rosterAdd,{[id]:(s.rosterAdd[id]||[]).concat(name)}),addQ:'',addOpen:false,sheetErr:null}));}
+    this.flash('Iscrizione di '+name+' confermata · riceve un avviso');}
+  unenroll(id,name){const i=this.info(this.get(id));
+    if(name===ME){this.setState(s=>({booked:s.booked.filter(b=>b!==id),used:s.used-1,sheetErr:null}));
+      this.push('client','calendar-x','Prenotazione rimossa dallo studio',i.name+', '+i.day+' '+i.dtime+'. La lezione è tornata nel tuo pacchetto.',{tab:'home'});}
+    else if((this.state.rosterAdd[id]||[]).includes(name))this.setState(s=>({rosterAdd:Object.assign({},s.rosterAdd,{[id]:s.rosterAdd[id].filter(n=>n!==name)}),sheetErr:null}));
+    else this.setState(s=>({rosterDel:Object.assign({},s.rosterDel,{[id]:(s.rosterDel[id]||[]).concat(name)}),sheetErr:null}));
+    this.flash('Iscrizione di '+name+' rimossa · riceve un avviso');
+    // A spot opened: if the demo client is waiting for it, offer it right away.
+    const st=this.state;if(name!==ME&&st.waitlist.includes(id)&&!st.offer&&this.state.cfg.rules.waitOn){const m=st.cfg.rules.wait;this.setState({offer:{id:id,end:Date.now()+m*60000},now:Date.now()});
+      this.push('client','bell-ring','Si è liberato un posto',i.name+', '+i.day+' '+i.dtime+'. Hai '+m+' minuti per confermare.',{tab:'home'});}}
   row(c){const i=this.info(c);
     const TG={booked:['PRENOTATO','#2486AB','#fff'],full:i.waiting&&this.state.cfg.rules.waitOn?['IN ATTESA','#283A3E','#fff']:['COMPLETO','#283A3E','#BFC5C8'],open:['PRENOTA','#fff','#0B0D0F'],cancelled:['ANNULLATO','#283A3E','#BFC5C8']}[i.status];
     return Object.assign(i,{tag:TG[0],tagBg:TG[1],tagFg:TG[2],sub:i.trainer+' · '+i.spotsLabel,opacity:i.status==='cancelled'?0.5:i.status==='full'?0.6:1,onOpen:()=>this.openSheet({kind:'class',id:c.id})});}
@@ -76,6 +98,14 @@ export class BeliteLogic extends Component {
         bookLabel:st.pending?'Prenotazione in corso…':'Conferma · usa 1 lezione',waitLabel:i.waiting?'Esci dalla lista d’attesa':'Entra in lista d’attesa',
         note:i.status==='cancelled'?'Questo corso è stato annullato dallo studio.':i.mine?'Cancellazione gratuita fino a '+R.cancel+' ore prima della lezione.':i.status==='full'?(i.waiting?'Sei in lista d’attesa. Quando si libera un posto hai '+R.wait+' minuti per confermarlo.':(R.waitOn?'Corso a numero chiuso. Se si libera un posto ti avvisiamo: avrai '+R.wait+' minuti per confermarlo.':'Corso a numero chiuso: al momento non ci sono posti.')):'Hai '+credits+' lezioni nel pacchetto. Prenotabile fino a '+R.minBefore+' ore prima, cancellazione gratuita fino a '+R.cancel+' ore prima.',
         onBook:()=>this.book(id),onCancel:()=>this.cancel(id),onWait:()=>this.wait(id),
+        people:i.roster.map(nm=>({name:nm,init:ini(nm),you:nm===ME,onRemove:()=>this.unenroll(id,nm)})),
+        rosterLabel:'ISCRITTI · '+i.taken+'/'+i.cap,canAdd:i.free>0,addOpen:st.addOpen,addQ:st.addQ,
+        onAddOpen:()=>this.setState({addOpen:true,addQ:'',sheetErr:null}),onAddClose:()=>this.setState({addOpen:false,addQ:''}),onAddQ:e=>this.setState({addQ:e.target.value,sheetErr:null}),
+        candidates:(()=>{const q=st.addQ.trim().toLowerCase();const known=[ME].concat(CLIENTS.slice(1).map(r=>{const w=r[0].split(' ');return w[0]+' '+w[1][0]+'.';}),POOL);
+          const uniq=known.filter((n,k)=>known.indexOf(n)===k&&!i.roster.includes(n)&&(!q||n.toLowerCase().includes(q)));
+          return uniq.slice(0,6).map(n=>({name:n,init:ini(n),onPick:()=>this.enroll(id,n)}));})(),
+        newName:(()=>{const q=st.addQ.trim();const all=[ME].concat(POOL);return q.length>=3&&!all.some(n=>n.toLowerCase()===q.toLowerCase())?q:'';})(),
+        onAddNew:()=>this.enroll(id,st.addQ),
         trainers:this.trainerChoices(i.type).map(m=>Object.assign({label:m.name,onPick:()=>this.reassign(id,m.id)},lc(i.trainerId===m.id))),
         moves:TIMES.map(t=>Object.assign({label:t,onPick:()=>this.move(id,t)},lc(i.dtime===t))),
         showMove:i.status!=='cancelled'&&!st.confirmCancel,confirming:i.status!=='cancelled'&&st.confirmCancel,isCancelled:i.status==='cancelled',
@@ -92,8 +122,8 @@ export class BeliteLogic extends Component {
       onOpen:()=>this.setState(s=>Object.assign({notifs:Object.assign({},s.notifs,{[role]:s.notifs[role].map(y=>y.id===x.id?Object.assign({},y,{read:true}):y)}),prev:null,sheet:null},x.go))}));
     const unread=st.notifs[role].filter(x=>!x.read).length;
     // trainer
-    const agenda=this.dayList(0).filter(c=>this.trainerId(c)===OWNER_ID&&!st.cancelled[c.id]).map(c=>{const i=this.info(c);const s=c.seed||0;
-      const names=(i.mine?['Francesca C.']:[]).concat(POOL.slice(s%3,s%3+i.taken-(i.mine?1:0)));
+    const agenda=this.dayList(0).filter(c=>this.trainerId(c)===OWNER_ID&&!st.cancelled[c.id]).map(c=>{const i=this.info(c);
+      const names=i.roster;
       const people=names.map(nm=>{const k=c.id+'|'+nm;const on=!!st.checkin[k];return Object.assign({name:nm,init:ini(nm),on:on,onToggle:()=>this.setState(x=>({checkin:Object.assign({},x.checkin,{[k]:!x.checkin[k]})}))},ck(on));});
       return Object.assign(i,{people:people,count:people.length,present:people.filter(p=>p.on).length,empty:!people.length});});
     const ppl=agenda.reduce((t,a)=>t+a.count,0);const pres=agenda.reduce((t,a)=>t+a.present,0);

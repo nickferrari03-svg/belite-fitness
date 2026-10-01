@@ -11,7 +11,10 @@ export const LIB=[['Roll Up al Reformer','10'],['Plank con knee tuck','30 sec'],
 export const TIMES=['07:30','09:00','10:30','12:30','17:00','18:00','19:15','20:30'];
 export const ADD_TIMES=['07:00','08:30','11:00','14:00','17:00','21:00'];
 export const CLIENTS=[['Francesca Conti','Tonificazione e postura',6,null],['Marco Bianchi','Forza funzionale',3,3],['Elena Ferri','Pilates Reformer',7,1],['Luca Moretti','Mobilità e schiena',2,7],['Sofia Galli','Post-parto',4,5]];
-export const POOL=['Marco B.','Elena F.','Luca M.','Sofia G.','Chiara V.'];
+export const ME='Francesca C.';
+export const POOL=['Marco B.','Elena F.','Luca M.','Sofia G.','Chiara V.','Paolo R.','Giorgia T.','Davide L.','Anna P.','Matteo S.','Laura N.','Simone D.'];
+// Deterministic demo roster for a class: n names from POOL starting at the class seed.
+export const pick=(seed,n)=>Array.from({length:Math.min(n,POOL.length)},(_,k)=>POOL[(seed+k)%POOL.length]);
 export const MEAS=[['w','PESO','kg',0.1],['v','VITA','cm',0.5],['h','FIANCHI','cm',0.5]];
 export const TEAM=[['Andrea','Titolare · Personal trainer'],['Sara','Pilates Reformer e Matwork'],['Marta','Yoga']];
 let NID=0;
