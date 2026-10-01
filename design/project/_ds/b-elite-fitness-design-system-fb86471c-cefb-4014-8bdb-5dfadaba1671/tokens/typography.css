@@ -1,0 +1,15 @@
+:root{
+--font-display:"Bebas Neue","Oswald",Impact,sans-serif;
+--font-serif:"Instrument Serif","Bodoni Moda",Georgia,serif;
+--font-sans:"Montserrat","Helvetica Neue",Arial,sans-serif;
+--fw-regular:400;/* @kind font */--fw-medium:500;/* @kind font */--fw-semibold:600;/* @kind font */--fw-bold:700;/* @kind font */--fw-black:800;/* @kind font */
+--fs-12:12px;--fs-14:14px;--fs-16:16px;--fs-18:18px;--fs-22:22px;--fs-28:28px;--fs-36:36px;--fs-48:48px;--fs-64:64px;--fs-88:88px;--fs-120:120px;
+--lh-tight:.92;/* @kind font */--lh-snug:1.15;/* @kind font */--lh-body:1.45;/* @kind font */
+--tracking-caps:.08em;/* @kind font */--tracking-wide:.18em;/* @kind font */--tracking-display:0;/* @kind font */
+/* Semantic */
+--type-display:var(--fw-regular) var(--fs-88)/var(--lh-tight) var(--font-display);
+--type-serif-title:var(--fw-regular) var(--fs-64)/1 var(--font-serif);
+--type-heading:var(--fw-bold) var(--fs-28)/var(--lh-snug) var(--font-sans);
+--type-body:var(--fw-regular) var(--fs-18)/var(--lh-body) var(--font-sans);
+--type-label:var(--fw-semibold) var(--fs-12)/1.2 var(--font-sans);
+}

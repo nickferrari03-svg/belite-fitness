@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/tokens/colors.css">
+<link rel="stylesheet" href="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/tokens/typography.css">
+<link rel="stylesheet" href="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/tokens/effects.css">
+<link rel="stylesheet" href="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/styles.css">
+<script src="_ds/b-elite-fitness-design-system-fb86471c-cefb-4014-8bdb-5dfadaba1671/_ds_bundle.js"></script>
+<style>body{margin:0;background:#E6E4E1;font-family:Montserrat,sans-serif}a{color:#2486AB}a:hover{color:#1E7194}*::-webkit-scrollbar{display:none}@keyframes beUp{from{transform:translateY(100%)}to{transform:none}}@keyframes beFade{from{opacity:0}to{opacity:1}}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 16px;box-sizing:border-box">
+<div data-screen-label="App" style="position:relative;width:390px;height:844px;border-radius:54px;background:#000;box-shadow:0 0 0 10px #1A1D20,0 0 0 11px #333,0 40px 80px rgba(0,0,0,.35);overflow:hidden;color:#fff">
+
+<div style="position:absolute;top:0;left:0;right:0;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 34px 0 40px;z-index:30;font:600 16px Montserrat,sans-serif;background:#000">
+<span>9:41</span>
+<div style="position:absolute;left:50%;top:11px;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000;box-shadow:0 0 0 1px #111"></div>
+<div style="display:flex;gap:6px;align-items:center">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="signal" size="{{ n16 }}" color="#fff" hint-size="16px,16px"></x-import>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="wifi" size="{{ n16 }}" color="#fff" hint-size="16px,16px"></x-import>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="battery-full" size="{{ n20 }}" color="#fff" hint-size="20px,16px"></x-import>
+</div>
+</div>
+
+<div style="position:absolute;top:50px;left:0;right:0;bottom:84px;overflow-y:auto;scrollbar-width:none">
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Logo" variant="lockup" height="{{ n30 }}" hint-size="110px,30px"></x-import>
+<button onClick="{{ goNotifs }}" aria-label="Notifiche" style="width:44px;height:44px;border-radius:999px;border:0;background:#1A1D20;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="bell" size="{{ n20 }}" color="#fff" hint-size="20px,20px"></x-import>
+<sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:6px;right:6px;min-width:16px;height:16px;border-radius:99px;background:#2486AB;font:700 10px/16px Montserrat,sans-serif;color:#fff;text-align:center;padding:0 4px;box-sizing:border-box">{{ unread }}</span></sc-if>
+</button>
+</div>
+
+<div>
+<div style="font:400 26px/1 'Instrument Serif',serif;font-style:italic;color:#BFC5C8">Ciao,</div>
+<div style="font:400 56px/.92 'Bebas Neue',sans-serif;letter-spacing:.01em">GIULIA</div>
+</div>
+
+<sc-if value="{{ hasNext }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ goBookings }}" style="position:relative;overflow:hidden;border-radius:20px;background:#2486AB;padding:22px 22px 20px;cursor:pointer;min-height:176px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between">
+<sc-if value="{{ showArc }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;right:-90px;top:-70px;width:250px;height:250px;border-radius:50%;border:34px solid rgba(255,255,255,.14)"></div></sc-if>
+<div style="position:relative;font:600 11px Montserrat,sans-serif;letter-spacing:.18em">PROSSIMA LEZIONE</div>
+<div style="position:relative">
+<div style="font:400 44px/.95 'Bebas Neue',sans-serif">{{ next.name }}</div>
+<div style="display:flex;gap:14px;margin-top:10px;font:500 14px Montserrat,sans-serif;flex-wrap:wrap">
+<span style="display:flex;gap:6px;align-items:center"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="calendar" size="{{ n15 }}" color="#fff" hint-size="15px,15px"></x-import>{{ next.day }}</span>
+<span style="display:flex;gap:6px;align-items:center"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="clock" size="{{ n15 }}" color="#fff" hint-size="15px,15px"></x-import>{{ next.time }}</span>
+<span style="display:flex;gap:6px;align-items:center"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="user-round" size="{{ n15 }}" color="#fff" hint-size="15px,15px"></x-import>{{ next.trainer }}</span>
+</div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ noNext }}" hint-placeholder-val="{{ false }}">
+<div style="border-radius:20px;background:#1A1D20;padding:22px;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+<div style="font:400 32px/.95 'Bebas Neue',sans-serif">NESSUNA LEZIONE IN PROGRAMMA</div>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="primary" size="md" onClick="{{ goOrari }}" hint-size="160px,44px">Prenota ora</x-import>
+</div>
+</sc-if>
+
+<div onClick="{{ goBookings }}" style="border-radius:20px;background:#1A1D20;padding:18px 20px;display:flex;flex-direction:column;gap:12px;cursor:pointer">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8">PACCHETTO 10 LEZIONI</div>
+<div style="font:400 30px/1 'Bebas Neue',sans-serif">{{ credits }}<span style="color:#6B7479"> / 10</span></div>
+</div>
+<div style="height:6px;border-radius:99px;background:#283A3E;overflow:hidden"><div style="height:100%;border-radius:99px;background:#2486AB;transition:width .24s ease-out;width:{{ creditsPct }}"></div></div>
+<div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8">{{ creditsLabel }}</div>
+</div>
+
+<div onClick="{{ goPiano }}" style="border-radius:20px;background:#1A1D20;padding:18px 20px;display:flex;align-items:center;gap:16px;cursor:pointer">
+<div style="position:relative;width:56px;height:56px;border-radius:999px;background:conic-gradient(#2486AB {{ exPctDeg }},#283A3E 0);display:flex;align-items:center;justify-content:center;flex:none"><div style="width:44px;height:44px;border-radius:999px;background:#1A1D20;display:flex;align-items:center;justify-content:center;font:400 20px/1 'Bebas Neue',sans-serif">{{ exDoneN }}/{{ exTotal }}</div></div>
+<div style="flex:1;min-width:0"><div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8">ALLENAMENTO DI OGGI</div><div style="font:400 26px/1 'Bebas Neue',sans-serif;margin-top:4px">CORE &amp; POSTURA</div></div>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="chevron-right" size="{{ n18 }}" color="#6B7479" hint-size="18px,18px"></x-import>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:400 30px/1 'Instrument Serif',serif">Lunedì in studio</div>
+<button onClick="{{ goOrari }}" style="border:0;background:none;color:#2486AB;font:600 13px Montserrat,sans-serif;cursor:pointer;padding:12px 0">Tutti gli orari</button>
+</div>
+<sc-for list="{{ preview }}" as="c" hint-placeholder-count="3">
+<div onClick="{{ c.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14);cursor:pointer">
+<div style="font:400 28px/1 'Bebas Neue',sans-serif;width:62px">{{ c.time }}</div>
+<div style="width:4px;align-self:stretch;border-radius:4px;background:{{ c.color }}"></div>
+<div style="flex:1;min-width:0"><div style="font:600 15px Montserrat,sans-serif">{{ c.name }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:3px">{{ c.spotsLabel }}</div></div>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="chevron-right" size="{{ n18 }}" color="#6B7479" hint-size="18px,18px"></x-import>
+</div>
+</sc-for>
+</div>
+
+<div style="position:relative;border-radius:20px;overflow:hidden;height:200px">
+<img src="assets/photos/reformer-room.png" alt="Sala Reformer B Elite Fitness" style="width:100%;height:100%;object-fit:cover;display:block">
+<div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.85),rgba(0,0,0,0) 65%)"></div>
+<div style="position:absolute;left:18px;right:18px;bottom:16px">
+<div style="font:400 30px/.95 'Bebas Neue',sans-serif">CORSI A NUMERO CHIUSO</div>
+<div style="font:500 13px Montserrat,sans-serif;color:#fff;margin-top:4px">Reformer: solo 2 partecipanti. Più attenzione, più precisione, più risultati.</div>
+</div>
+</div>
+
+<sc-if value="{{ showReview }}" hint-placeholder-val="{{ true }}">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.ReviewCard" quote="Ambiente curato e allenamenti davvero su misura. Dopo poche lezioni ho sentito la differenza." author="Cliente B Elite" stars="{{ five }}" source="Google" hint-size="100%,180px"></x-import>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ isOrari }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 0 32px;display:flex;flex-direction:column;gap:18px">
+<div style="padding:0 20px"><div style="font:400 48px/.92 'Bebas Neue',sans-serif">ORARI</div><div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8;margin-top:4px">28 settembre – 3 ottobre</div></div>
+<div style="display:flex;gap:8px;padding:0 20px;overflow-x:auto">
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="6">
+<button onClick="{{ d.onPick }}" style="flex:none;width:52px;height:68px;border-radius:8px;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:background .24s ease-out;background:{{ d.bg }};color:{{ d.fg }}">
+<span style="font:600 11px Montserrat,sans-serif;letter-spacing:.08em">{{ d.k }}</span>
+<span style="font:400 28px/1 'Bebas Neue',sans-serif">{{ d.n }}</span>
+</button>
+</sc-for>
+</div>
+<div style="display:flex;gap:8px;padding:0 20px;overflow-x:auto">
+<sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.ServicePill" active="{{ f.active }}" onClick="{{ f.onPick }}" style="flex:none" hint-size="90px,36px">{{ f.label }}</x-import>
+</sc-for>
+</div>
+<div style="padding:0 20px;font:400 26px/1 'Instrument Serif',serif">{{ dayFull }}</div>
+<div style="padding:0 20px;display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ classes }}" as="c" hint-placeholder-count="4">
+<div onClick="{{ c.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:14px 14px 14px 0;border-radius:8px;background:#1A1D20;cursor:pointer;overflow:hidden;opacity:{{ c.opacity }}">
+<div style="width:5px;align-self:stretch;background:{{ c.color }}"></div>
+<div style="font:400 28px/1 'Bebas Neue',sans-serif;width:56px">{{ c.time }}</div>
+<div style="flex:1;min-width:0">
+<div style="font:600 15px Montserrat,sans-serif">{{ c.name }}</div>
+<div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:3px">{{ c.trainer }} · {{ c.spotsLabel }}</div>
+</div>
+<div style="font:700 11px Montserrat,sans-serif;letter-spacing:.08em;padding:8px 12px;border-radius:999px;background:{{ c.tagBg }};color:{{ c.tagFg }}">{{ c.tag }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ emptyDay }}" hint-placeholder-val="{{ false }}"><div style="padding:32px 0;text-align:center;font:500 14px Montserrat,sans-serif;color:#BFC5C8">Nessun corso per questo filtro.</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBookings }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:22px">
+<div style="font:400 48px/.92 'Bebas Neue',sans-serif">LE MIE LEZIONI</div>
+<div style="position:relative;overflow:hidden;border-radius:20px;background:#fff;color:#0B0D0F;padding:22px">
+<div style="position:absolute;right:-60px;bottom:-80px;width:200px;height:200px;border-radius:50%;background:#EEF7FB"></div>
+<div style="position:relative;font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#1E7194">CREDITI DISPONIBILI</div>
+<div style="position:relative;display:flex;align-items:baseline;gap:8px;margin-top:6px"><span style="font:400 72px/.9 'Bebas Neue',sans-serif">{{ credits }}</span><span style="font:500 14px Montserrat,sans-serif;color:#6B7479">su 10 · scadenza 31 dic</span></div>
+<div style="position:relative;display:flex;gap:4px;margin-top:14px">
+<sc-for list="{{ creditDots }}" as="p" hint-placeholder-count="10"><div style="flex:1;height:8px;border-radius:2px;background:{{ p.bg }}"></div></sc-for>
+</div>
+</div>
+<div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8">IN PROGRAMMA</div>
+<sc-for list="{{ mine }}" as="m" hint-placeholder-count="2">
+<div style="border-radius:8px;background:#1A1D20;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:14px;align-items:center">
+<div style="width:52px;height:56px;border-radius:8px;background:{{ m.color }};color:#0B0D0F;display:flex;flex-direction:column;align-items:center;justify-content:center"><span style="font:700 10px Montserrat,sans-serif;letter-spacing:.08em">{{ m.k }}</span><span style="font:400 26px/1 'Bebas Neue',sans-serif">{{ m.n }}</span></div>
+<div style="flex:1"><div style="font:600 15px Montserrat,sans-serif">{{ m.name }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:3px">{{ m.time }} · {{ m.trainer }} · 50 min</div></div>
+</div>
+<div style="display:flex;gap:10px">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="outline" size="sm" onClick="{{ m.onCancel }}" style="flex:1" hint-size="140px,36px">Annulla</x-import>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="ghost" size="sm" onClick="{{ m.onCal }}" style="flex:1" hint-size="140px,36px">Aggiungi al calendario</x-import>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ noNext }}" hint-placeholder-val="{{ false }}"><div style="font:500 14px Montserrat,sans-serif;color:#BFC5C8">Non hai lezioni prenotate.</div></sc-if>
+<div style="display:flex;gap:10px;align-items:flex-start;font:500 12px/1.45 Montserrat,sans-serif;color:#BFC5C8">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="info" size="{{ n16 }}" color="#2486AB" hint-size="16px,16px"></x-import>
+<span>Cancellazione gratuita fino a 24 ore prima: il credito torna nel tuo pacchetto.</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isProfile }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:26px">
+<div style="display:flex;gap:16px;align-items:center">
+<div style="width:64px;height:64px;border-radius:999px;background:#2486AB;display:flex;align-items:center;justify-content:center;font:400 30px/1 'Bebas Neue',sans-serif">{{ prof.init }}</div>
+<div><div style="font:400 36px/.95 'Bebas Neue',sans-serif">{{ prof.name }}</div><div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8;margin-top:4px">{{ prof.sub }}</div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8">MODALITÀ APP</div>
+<div role="tablist" style="display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:#1A1D20;gap:4px">
+<sc-for list="{{ roles }}" as="r" hint-placeholder-count="2">
+<button role="tab" onClick="{{ r.onPick }}" style="height:44px;border:0;border-radius:999px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font:600 13px Montserrat,sans-serif;transition:background .24s ease-out;background:{{ r.bg }};color:{{ r.fg }}"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="{{ r.icon }}" size="{{ n16 }}" color="{{ r.fg }}" hint-size="16px,16px"></x-import>{{ r.label }}</button>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ isClient }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column">
+<div style="font:400 30px/1 'Instrument Serif',serif;margin-bottom:8px">I nostri servizi</div>
+<sc-for list="{{ services }}" as="s" hint-placeholder-count="4">
+<div onClick="{{ s.onPick }}" style="display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.14);cursor:pointer;min-height:44px">
+<div style="width:40px;height:40px;border-radius:999px;background:rgba(36,134,171,.28);display:flex;align-items:center;justify-content:center"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="{{ s.icon }}" size="{{ n18 }}" color="#fff" hint-size="18px,18px"></x-import></div>
+<div style="flex:1"><div style="font:600 15px Montserrat,sans-serif">{{ s.name }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:2px">{{ s.sub }}</div></div>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="chevron-right" size="{{ n18 }}" color="#6B7479" hint-size="18px,18px"></x-import>
+</div>
+</sc-for>
+</div></sc-if>
+<div style="border-radius:20px;background:#1A1D20;padding:20px;display:flex;flex-direction:column;gap:14px">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Logo" variant="full" height="{{ n84 }}" style="align-self:center" hint-size="120px,84px"></x-import>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.BrandRule" color="#2486AB" width="100%" hint-size="100%,8px"></x-import>
+<div style="display:flex;gap:10px;align-items:center;font:500 14px Montserrat,sans-serif"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="map-pin" size="{{ n16 }}" color="#2486AB" hint-size="16px,16px"></x-import>Via Aymo Maggi 3, Cazzago San Martino</div>
+<div style="display:flex;gap:10px;align-items:center;font:500 14px Montserrat,sans-serif"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="mail" size="{{ n16 }}" color="#2486AB" hint-size="16px,16px"></x-import>info@belitefitness.it</div>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="primary" size="md" onClick="{{ call }}" hint-size="100%,44px">Chiama Andrea · 339 870 1308</x-import>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPiano }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:24px">
+<div><div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8">SETTIMANA 6 DI 8 · CON ANDREA</div><div style="font:400 48px/.92 'Bebas Neue',sans-serif;margin-top:6px">IL MIO PIANO</div><div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8;margin-top:4px">Obiettivo: tonificazione e postura</div></div>
+<div style="position:relative;overflow:hidden;border-radius:20px;background:#2486AB;padding:20px">
+<div style="position:absolute;right:-80px;top:-80px;width:220px;height:220px;border-radius:50%;border:30px solid rgba(255,255,255,.14)"></div>
+<div style="position:relative;font:600 11px Montserrat,sans-serif;letter-spacing:.18em">ALLENAMENTO DI OGGI · 40 MIN</div>
+<div style="position:relative;font:400 40px/.95 'Bebas Neue',sans-serif;margin-top:6px">CORE &amp; POSTURA</div>
+<div style="position:relative;display:flex;align-items:center;gap:12px;margin-top:14px"><div style="flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.28);overflow:hidden"><div style="height:100%;background:#fff;border-radius:99px;transition:width .24s ease-out;width:{{ exPct }}"></div></div><span style="font:600 13px Montserrat,sans-serif">{{ exDoneN }}/{{ exTotal }} esercizi</span></div>
+</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ exercises }}" as="e" hint-placeholder-count="5">
+<button onClick="{{ e.onToggle }}" aria-pressed="{{ e.done }}" style="display:flex;align-items:center;gap:14px;padding:14px 0;border:0;border-bottom:1px solid rgba(255,255,255,.14);background:none;color:#fff;text-align:left;cursor:pointer;min-height:56px">
+<div style="width:28px;height:28px;border-radius:999px;flex:none;display:flex;align-items:center;justify-content:center;transition:background .24s ease-out;border:1.5px solid {{ e.ring }};background:{{ e.fill }}"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="check" size="{{ n16 }}" color="{{ e.tick }}" hint-size="16px,16px"></x-import></div>
+<div style="flex:1;min-width:0"><div style="font:600 15px Montserrat,sans-serif;opacity:{{ e.op }}">{{ e.name }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:3px">{{ e.detail }}</div></div>
+</button>
+</sc-for>
+</div>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="{{ completeVariant }}" size="lg" onClick="{{ completeWorkout }}" style="width:100%" hint-size="100%,52px">{{ completeLabel }}</x-import>
+<div style="display:flex;flex-direction:column;gap:14px">
+<div style="font:400 30px/1 'Instrument Serif',serif">Progressi</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="border-radius:8px;background:#1A1D20;padding:14px 16px"><div style="font:400 40px/1 'Bebas Neue',sans-serif">{{ totalSessions }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:2px">sessioni completate</div></div>
+<div style="border-radius:8px;background:#1A1D20;padding:14px 16px"><div style="font:400 40px/1 'Bebas Neue',sans-serif">5 SETT.</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:2px">di costanza di fila</div></div>
+</div>
+<div style="border-radius:8px;background:#1A1D20;padding:16px">
+<div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8;margin-bottom:14px">SESSIONI A SETTIMANA</div>
+<div style="display:flex;align-items:flex-end;gap:8px;height:110px">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="8">
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
+<span style="font:600 11px Montserrat,sans-serif;color:#fff">{{ b.v }}</span>
+<div style="width:100%;border-radius:4px 4px 0 0;transition:height .24s ease-out;height:{{ b.h }};background:{{ b.bg }}"></div>
+<span style="font:600 10px Montserrat,sans-serif;color:#BFC5C8">{{ b.l }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="border-radius:20px;background:#fff;color:#0B0D0F;padding:18px 20px">
+<div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#1E7194">NOTA DEL TRAINER</div>
+<div style="font:400 24px/1.15 'Instrument Serif',serif;margin-top:8px">“Ottimo controllo nel Roll Up. Questa settimana aumentiamo la tenuta del plank.”</div>
+<div style="font:600 13px Montserrat,sans-serif;margin-top:10px">Andrea</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isNotifs }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;align-items:center;justify-content:space-between"><button onClick="{{ goBack }}" aria-label="Indietro" style="width:44px;height:44px;border-radius:999px;border:0;background:#1A1D20;display:flex;align-items:center;justify-content:center;cursor:pointer"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="chevron-left" size="{{ n20 }}" color="#fff" hint-size="20px,20px"></x-import></button>
+<button onClick="{{ readAll }}" style="border:0;background:none;color:#2486AB;font:600 13px Montserrat,sans-serif;cursor:pointer;padding:12px 0">Segna tutte come lette</button></div>
+<div style="font:400 48px/.92 'Bebas Neue',sans-serif">NOTIFICHE</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{ notifs }}" as="x" hint-placeholder-count="4">
+<button onClick="{{ x.onOpen }}" style="display:flex;gap:14px;align-items:flex-start;padding:14px;border:0;border-radius:8px;text-align:left;color:#fff;cursor:pointer;background:{{ x.bg }}">
+<div style="width:40px;height:40px;border-radius:999px;background:rgba(36,134,171,.28);display:flex;align-items:center;justify-content:center;flex:none"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="{{ x.icon }}" size="{{ n18 }}" color="#fff" hint-size="18px,18px"></x-import></div>
+<div style="flex:1;min-width:0"><div style="display:flex;justify-content:space-between;gap:8px"><span style="font:600 14px Montserrat,sans-serif">{{ x.t }}</span><span style="font:500 11px Montserrat,sans-serif;color:#BFC5C8;flex:none">{{ x.time }}</span></div><div style="font:500 13px/1.4 Montserrat,sans-serif;color:#BFC5C8;margin-top:4px">{{ x.b }}</div></div>
+<div style="width:8px;height:8px;border-radius:99px;margin-top:6px;flex:none;background:{{ x.dot }}"></div>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isToday }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;justify-content:space-between">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Logo" variant="lockup" height="{{ n30 }}" hint-size="110px,30px"></x-import>
+<button onClick="{{ goNotifs }}" aria-label="Notifiche" style="width:44px;height:44px;border-radius:999px;border:0;background:#1A1D20;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="bell" size="{{ n20 }}" color="#fff" hint-size="20px,20px"></x-import>
+<sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:6px;right:6px;min-width:16px;height:16px;border-radius:99px;background:#2486AB;font:700 10px/16px Montserrat,sans-serif;color:#fff;text-align:center;padding:0 4px;box-sizing:border-box">{{ unread }}</span></sc-if>
+</button>
+</div>
+<div><div style="font:400 26px/1 'Instrument Serif',serif;font-style:italic;color:#BFC5C8">Buongiorno,</div><div style="font:400 56px/.92 'Bebas Neue',sans-serif">ANDREA</div><div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8;margin-top:6px">Lunedì 28 settembre · {{ agendaSummary }}</div></div>
+<sc-for list="{{ agenda }}" as="a" hint-placeholder-count="3">
+<div style="border-radius:20px;background:#1A1D20;overflow:hidden">
+<div style="display:flex;align-items:center;gap:14px;padding:16px 16px 12px">
+<div style="font:400 32px/1 'Bebas Neue',sans-serif">{{ a.time }}</div>
+<div style="flex:1;min-width:0"><div style="font:600 15px Montserrat,sans-serif">{{ a.name }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:2px">Presenze {{ a.present }}/{{ a.count }} · {{ a.spotsLabel }}</div></div>
+<div style="width:10px;height:10px;border-radius:99px;background:{{ a.color }}"></div>
+</div>
+<div style="display:flex;flex-direction:column;padding:0 8px 8px">
+<sc-for list="{{ a.people }}" as="p" hint-placeholder-count="2">
+<button onClick="{{ p.onToggle }}" aria-pressed="{{ p.on }}" style="display:flex;align-items:center;gap:12px;height:52px;padding:0 8px;border:0;border-radius:8px;background:none;color:#fff;cursor:pointer;text-align:left">
+<div style="width:34px;height:34px;border-radius:999px;background:#283A3E;display:flex;align-items:center;justify-content:center;font:400 16px/1 'Bebas Neue',sans-serif">{{ p.init }}</div>
+<span style="flex:1;font:600 14px Montserrat,sans-serif">{{ p.name }}</span>
+<span style="font:600 11px Montserrat,sans-serif;letter-spacing:.08em;color:{{ p.labelColor }}">{{ p.label }}</span>
+<div style="width:26px;height:26px;border-radius:999px;display:flex;align-items:center;justify-content:center;transition:background .24s ease-out;border:1.5px solid {{ p.ring }};background:{{ p.fill }}"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="check" size="{{ n15 }}" color="{{ p.tick }}" hint-size="15px,15px"></x-import></div>
+</button>
+</sc-for>
+<sc-if value="{{ a.empty }}" hint-placeholder-val="{{ false }}"><div style="padding:8px 8px 10px;font:500 13px Montserrat,sans-serif;color:#BFC5C8">Nessun iscritto.</div></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ isClients }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:18px">
+<div style="font:400 48px/.92 'Bebas Neue',sans-serif">I MIEI CLIENTI</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ clients }}" as="c" hint-placeholder-count="5">
+<button onClick="{{ c.onOpen }}" style="display:flex;align-items:center;gap:14px;padding:14px 0;border:0;border-bottom:1px solid rgba(255,255,255,.14);background:none;color:#fff;text-align:left;cursor:pointer">
+<div style="width:44px;height:44px;border-radius:999px;background:#283A3E;display:flex;align-items:center;justify-content:center;font:400 20px/1 'Bebas Neue',sans-serif;flex:none">{{ c.init }}</div>
+<div style="flex:1;min-width:0"><div style="font:600 15px Montserrat,sans-serif">{{ c.name }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:3px">{{ c.plan }} · sett. {{ c.week }}/8</div></div>
+<div style="font:700 11px Montserrat,sans-serif;letter-spacing:.06em;padding:6px 10px;border-radius:999px;background:{{ c.tagBg }};color:{{ c.tagFg }}">{{ c.credits }} LEZ.</div>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isClientDetail }}" hint-placeholder-val="{{ false }}">
+<div style="padding:12px 20px 32px;display:flex;flex-direction:column;gap:22px">
+<div><button onClick="{{ goBack }}" aria-label="Indietro" style="width:44px;height:44px;border-radius:999px;border:0;background:#1A1D20;display:flex;align-items:center;justify-content:center;cursor:pointer"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="chevron-left" size="{{ n20 }}" color="#fff" hint-size="20px,20px"></x-import></button></div>
+<div style="display:flex;gap:16px;align-items:center">
+<div style="width:64px;height:64px;border-radius:999px;background:#2486AB;display:flex;align-items:center;justify-content:center;font:400 30px/1 'Bebas Neue',sans-serif">{{ cd.init }}</div>
+<div><div style="font:400 36px/.95 'Bebas Neue',sans-serif">{{ cd.upper }}</div><div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8;margin-top:4px">{{ cd.plan }}</div></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+<div style="border-radius:8px;background:#1A1D20;padding:14px 16px"><div style="font:400 40px/1 'Bebas Neue',sans-serif">{{ cd.credits }}</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:2px">lezioni rimaste</div></div>
+<div style="border-radius:8px;background:#1A1D20;padding:14px 16px"><div style="font:400 40px/1 'Bebas Neue',sans-serif">{{ cd.week }}/8</div><div style="font:500 12px Montserrat,sans-serif;color:#BFC5C8;margin-top:2px">settimana del piano</div></div>
+</div>
+<div style="border-radius:8px;background:#1A1D20;padding:16px;display:flex;flex-direction:column;gap:10px">
+<div style="font:600 11px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8">AVANZAMENTO PIANO</div>
+<div style="height:6px;border-radius:99px;background:#283A3E;overflow:hidden"><div style="height:100%;border-radius:99px;background:#2486AB;width:{{ cd.pct }}"></div></div>
+<div style="font:500 13px Montserrat,sans-serif;color:#BFC5C8">{{ cd.note }}</div>
+</div>
+<div style="display:flex;flex-direction:column">
+<div style="font:400 26px/1 'Instrument Serif',serif;margin-bottom:6px">Ultime sessioni</div>
+<sc-for list="{{ cd.sessions }}" as="s" hint-placeholder-count="3">
+<div style="display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.14);font:500 14px Montserrat,sans-serif"><span>{{ s.name }}</span><span style="color:#BFC5C8">{{ s.when }}</span></div>
+</sc-for>
+</div>
+<div style="display:flex;gap:10px">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="outline" size="md" onClick="{{ cd.onRemind }}" style="flex:1" hint-size="150px,44px">Invia promemoria</x-import>
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="primary" size="md" onClick="{{ cd.onPlan }}" style="flex:1" hint-size="150px,44px">Aggiorna piano</x-import>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="position:absolute;left:0;right:0;bottom:0;height:84px;background:rgba(11,13,15,.96);border-top:1px solid rgba(255,255,255,.14);display:flex;padding:6px 8px 0;box-sizing:border-box;z-index:20">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.onPick }}" aria-label="{{ t.label }}" style="flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;cursor:pointer;height:52px;color:{{ t.color }}">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="{{ t.icon }}" size="{{ n22 }}" color="{{ t.color }}" hint-size="22px,22px"></x-import>
+<span style="font:600 10px Montserrat,sans-serif;letter-spacing:.06em">{{ t.label }}</span>
+</button>
+</sc-for>
+<div style="position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:99px;background:#fff"></div>
+</div>
+
+<sc-if value="{{ sheetOpen }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:40;animation:beFade .24s ease-out"></div>
+<div style="position:absolute;left:0;right:0;bottom:0;z-index:41;background:#1A1D20;border-radius:20px 20px 0 0;padding:10px 22px 34px;display:flex;flex-direction:column;gap:18px;animation:beUp .28s cubic-bezier(.2,.8,.2,1)">
+<div style="align-self:center;width:40px;height:5px;border-radius:99px;background:#6B7479"></div>
+<div style="display:flex;justify-content:space-between;align-items:flex-start">
+<div>
+<div style="display:inline-block;font:700 10px Montserrat,sans-serif;letter-spacing:.12em;padding:5px 10px;border-radius:999px;color:#0B0D0F;background:{{ sheet.color }}">{{ sheet.kind }}</div>
+<div style="font:400 44px/.95 'Bebas Neue',sans-serif;margin-top:10px">{{ sheet.name }}</div>
+</div>
+<button onClick="{{ closeSheet }}" aria-label="Chiudi" style="width:44px;height:44px;border-radius:999px;border:0;background:#283A3E;display:flex;align-items:center;justify-content:center;cursor:pointer"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="x" size="{{ n18 }}" color="#fff" hint-size="18px,18px"></x-import></button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;font:500 14px Montserrat,sans-serif">
+<div><div style="font:600 10px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8;margin-bottom:4px">QUANDO</div>{{ sheet.day }}, {{ sheet.time }}</div>
+<div><div style="font:600 10px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8;margin-bottom:4px">ISTRUTTORE</div>{{ sheet.trainer }}</div>
+<div><div style="font:600 10px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8;margin-bottom:4px">DURATA</div>50 minuti</div>
+<div><div style="font:600 10px Montserrat,sans-serif;letter-spacing:.18em;color:#BFC5C8;margin-bottom:6px">POSTI · {{ sheet.spotsLabel }}</div>
+<div style="display:flex;gap:6px"><sc-for list="{{ sheet.dots }}" as="p" hint-placeholder-count="2"><div style="width:14px;height:14px;border-radius:99px;background:{{ p.bg }};border:1.5px solid #3F9CC4;box-sizing:border-box"></div></sc-for></div></div>
+</div>
+<div style="font:500 12px/1.45 Montserrat,sans-serif;color:#BFC5C8">{{ sheet.note }}</div>
+<sc-if value="{{ sheet.canBook }}" hint-placeholder-val="{{ true }}"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="primary" size="lg" onClick="{{ sheet.onBook }}" style="width:100%" hint-size="100%,52px">Conferma · usa 1 credito</x-import></sc-if>
+<sc-if value="{{ sheet.isBooked }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="outline" size="lg" onClick="{{ sheet.onCancel }}" style="width:100%" hint-size="100%,52px">Annulla prenotazione</x-import></sc-if>
+<sc-if value="{{ sheet.isFull }}" hint-placeholder-val="{{ false }}"><x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Button" variant="inverse" size="lg" onClick="{{ sheet.onWait }}" style="width:100%" hint-size="100%,52px">Avvisami se si libera un posto</x-import></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div role="status" aria-live="polite" style="position:absolute;left:20px;right:20px;top:60px;z-index:50;background:#fff;color:#0B0D0F;border-radius:999px;padding:14px 18px;display:flex;gap:10px;align-items:center;font:600 13px Montserrat,sans-serif;box-shadow:0 12px 30px rgba(0,0,0,.4);animation:beFade .24s ease-out">
+<x-import component-from-global-scope="BEliteFitnessDesignSystem_fb8647.Icon" name="circle-check" size="{{ n18 }}" color="#2486AB" hint-size="18px,18px"></x-import>{{ toast }}
+</div>
+</sc-if>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;role&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;client&quot;,&quot;trainer&quot;],&quot;default&quot;:&quot;client&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;packCredits&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:8,&quot;min&quot;:0,&quot;max&quot;:10,&quot;tsType&quot;:&quot;number&quot;},&quot;showArc&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showReview&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const DAYS=[{k:'LUN',n:28,full:'Lunedì 28 settembre'},{k:'MAR',n:29,full:'Martedì 29 settembre'},{k:'MER',n:30,full:'Mercoledì 30 settembre'},{k:'GIO',n:1,full:'Giovedì 1 ottobre'},{k:'VEN',n:2,full:'Venerdì 2 ottobre'},{k:'SAB',n:3,full:'Sabato 3 ottobre'}];
+const TYPES={reformer:{name:'Pilates Reformer',kind:'REFORMER',color:'#A9D2E8',cap:2},matwork:{name:'Pilates Matwork',kind:'MATWORK',color:'#3F9CC4',cap:4},yoga:{name:'Yoga',kind:'YOGA',color:'#E7B6F0',cap:4}};
+const SLOTS=[['07:30','reformer','Andrea'],['09:00','matwork','Sara'],['10:30','reformer','Sara'],['12:30','reformer','Andrea'],['18:00','yoga','Marta'],['19:15','reformer','Andrea'],['20:30','matwork','Sara']];
+const PLAN=[[0,1,3,4,5,6],[0,2,3,5],[1,3,4,5,6],[0,2,3,5,6],[0,1,3,4,5],[1,2,4]];
+const FULL={'0-07:30':1,'0-19:15':1,'2-12:30':1,'3-19:15':1};
+const cls=(d,i)=>{const [time,type,trainer]=SLOTS[i];const t=TYPES[type];const id=d+'-'+time;let s=0;for(const ch of id)s+=ch.charCodeAt(0);const base=FULL[id]?t.cap:s%t.cap;return {id,d,time,type,trainer,...t,base};};
+const ALL={};PLAN.forEach((ix,d)=>ix.forEach(i=>{const c=cls(d,i);ALL[c.id]=c;}));
+const EX=[['Roll Up al Reformer','3 × 10'],['Plank con knee tuck','3 × 30 sec'],['Bridge su jumpboard','3 × 12'],['Side kick in serie','2 × 12 per lato'],['Stretching catena posteriore','5 min']];
+const POOL=['Marco B.','Elena F.','Luca M.','Sofia G.','Chiara V.'];
+const NOTIFS={client:[['bell-ring','Promemoria lezione','Pilates Reformer lunedì alle 12:30 con Andrea.','2 h','bookings'],['dumbbell','Piano aggiornato','Andrea ha aggiornato il tuo piano: settimana 6.','Ieri','piano'],['circle-check','Posto disponibile','Si è liberato un posto: Yoga mercoledì 18:00.','Ieri','orari'],['package','Il tuo pacchetto','Le tue lezioni sono valide fino al 31 dicembre.','3 g','bookings']],
+trainer:[['user-plus','Nuova prenotazione','Giulia R. ha prenotato Pilates Reformer, lunedì 12:30.','10 min','today'],['calendar-x','Cancellazione','Marco B. ha annullato Reformer martedì 07:30.','1 h','today'],['circle-alert','Pacchetto in esaurimento','Elena F. ha 1 lezione rimasta.','Ieri','clients']]};
+const CLIENTS=[['Giulia Rossi','Tonificazione e postura',6],['Marco Bianchi','Forza funzionale',3,3],['Elena Ferri','Pilates Reformer',7,1],['Luca Moretti','Mobilità e schiena',2,7],['Sofia Galli','Post-parto',4,5]];
+const ini=n=>n.split(' ').map(w=>w[0]).join('').replace('.','').slice(0,2).toUpperCase();
+class Component extends DCLogic {
+  state={role:null,tab:null,prev:null,day:0,filter:'all',sheet:null,booked:['0-12:30','2-18:00'],used:0,toast:null,ex:{0:1,1:1},sessions:23,doneToday:false,read:{},checkin:{},client:0};
+  flash(msg){clearTimeout(this._t);this.setState({toast:msg});this._t=setTimeout(()=>this.setState({toast:null}),2600);}
+  componentWillUnmount(){clearTimeout(this._t);}
+  role(){return this.state.role??this.props.role??'client';}
+  tab(){return this.state.tab??(this.role()==='trainer'?'today':'home');}
+  credits(){return Math.max(0,(this.props.packCredits??8)-this.state.used);}
+  info(c){const mine=this.state.booked.includes(c.id);const base=mine?Math.min(c.base,c.cap-1):c.base;const taken=base+(mine?1:0);const free=c.cap-taken;
+    const status=mine?'booked':free<=0?'full':'open';
+    return {...c,mine,taken,free,status,spotsLabel:status==='full'?'Completo':free===1?'1 posto libero':free+' posti liberi',day:DAYS[c.d].full.split(' ').slice(0,2).join(' ')};}
+  book(id){if(this.credits()<=0){this.flash('Crediti esauriti · contatta Andrea');return;}this.setState(s=>({booked:[...s.booked,id],used:s.used+1,sheet:null}));this.flash('Prenotazione confermata');}
+  cancel(id){this.setState(s=>({booked:s.booked.filter(b=>b!==id),used:s.used-1,sheet:null}));this.flash('Lezione annullata · credito restituito');}
+  row(c){const i=this.info(c);const tag={booked:['PRENOTATO','#2486AB','#fff'],full:['COMPLETO','#283A3E','#BFC5C8'],open:['PRENOTA','#fff','#0B0D0F']}[i.status];
+    return {...i,tag:tag[0],tagBg:tag[1],tagFg:tag[2],opacity:i.status==='full'?.6:1,onOpen:()=>this.setState({sheet:c.id})};}
+  renderVals(){
+    const st=this.state;const role=this.role();const tab=this.tab();const credits=this.credits();
+    const go=t=>()=>this.setState({tab:t,sheet:null});
+    const dayClasses=PLAN[st.day].map(i=>ALL[st.day+'-'+SLOTS[i][0]]).filter(c=>st.filter==='all'||c.type===st.filter).map(c=>this.row(c));
+    const mine=st.booked.map(id=>ALL[id]).sort((a,b)=>a.d-b.d||a.time.localeCompare(b.time)).map(c=>({...c,k:DAYS[c.d].k,n:DAYS[c.d].n,onCancel:()=>this.cancel(c.id),onCal:()=>this.flash('Aggiunta al calendario')}));
+    const n=mine[0];
+    let sheet={};if(st.sheet){const i=this.info(ALL[st.sheet]);
+      sheet={...i,canBook:i.status==='open',isBooked:i.mine,isFull:i.status==='full',dots:Array.from({length:i.cap},(_,k)=>({bg:k<i.taken?'#3F9CC4':'transparent'})),
+        note:i.mine?'Cancellazione gratuita fino a 24 ore prima della lezione.':i.status==='full'?'Corso a numero chiuso. Ti avvisiamo appena si libera un posto.':'Hai '+credits+' crediti. Cancellazione gratuita fino a 24 ore prima.',
+        onBook:()=>this.book(i.id),onCancel:()=>this.cancel(i.id),onWait:()=>{this.setState({sheet:null});this.flash('Sei in lista d’attesa');}};}
+    const tabDefs=role==='trainer'?[['today','Oggi','sun'],['clients','Clienti','users'],['orari','Orari','calendar-days'],['profile','Profilo','user-round']]:[['home','Home','house'],['orari','Orari','calendar-days'],['piano','Piano','dumbbell'],['bookings','Lezioni','calendar-check'],['profile','Profilo','user-round']];
+    const active=tab==='clientDetail'?'clients':tab;
+    const tabs=tabDefs.map(([k,label,icon])=>({label,icon,color:active===k?'#2486AB':'#BFC5C8',onPick:go(k)}));
+    const req=name=>()=>this.flash('Richiesta '+name+' inviata · ti ricontattiamo');
+    // workout
+    const exDoneN=EX.filter((_,i)=>st.ex[i]).length;
+    const exercises=EX.map(([name,detail],i)=>{const d=!!st.ex[i];return {name,detail,done:d,ring:d?'#2486AB':'#6B7479',fill:d?'#2486AB':'transparent',tick:d?'#fff':'transparent',op:d?.6:1,onToggle:()=>this.setState(s=>({ex:{...s.ex,[i]:!s.ex[i]}}))};});
+    const week=[1,2,2,1,2,3,2,(st.doneToday?2:1)];
+    const bars=week.map((v,i)=>({v,l:'S'+(i+1),h:(v/3*72)+'%',bg:i===7?'#2486AB':'#3F9CC4'}));
+    // notifications
+    const nl=NOTIFS[role].map((x,i)=>{const key=role+i;const r=!!st.read[key];return {icon:x[0],t:x[1],b:x[2],time:x[3],bg:r?'transparent':'#1A1D20',dot:r?'transparent':'#2486AB',onOpen:()=>this.setState(s=>({read:{...s.read,[key]:true},tab:x[4],prev:null}))};});
+    const unread=NOTIFS[role].filter((_,i)=>!st.read[role+i]).length;
+    // trainer agenda
+    const agenda=PLAN[0].map(i=>ALL['0-'+SLOTS[i][0]]).filter(c=>c.trainer==='Andrea').map(c=>{const i=this.info(c);let s=0;for(const ch of c.id)s+=ch.charCodeAt(0);
+      const names=[...(i.mine?['Giulia R.']:[]),...POOL.slice(s%3,s%3+i.taken-(i.mine?1:0))];
+      const people=names.map(nm=>{const k=c.id+'|'+nm;const on=!!st.checkin[k];return {name:nm,init:ini(nm),on,label:on?'PRESENTE':'',labelColor:'#3F9CC4',ring:on?'#2486AB':'#6B7479',fill:on?'#2486AB':'transparent',tick:on?'#fff':'transparent',onToggle:()=>this.setState(x=>({checkin:{...x.checkin,[k]:!x.checkin[k]}}))};});
+      return {...i,people,count:people.length,present:people.filter(p=>p.on).length,empty:!people.length};});
+    const ppl=agenda.reduce((t,a)=>t+a.count,0);
+    const clients=CLIENTS.map(([name,plan,wk,cr],i)=>{const c=i===0?credits:cr;const low=c<=1;return {name,plan,week:wk,credits:c,init:ini(name),tagBg:low?'#E0453A':'#283A3E',tagFg:'#fff',onOpen:()=>this.setState({tab:'clientDetail',client:i})};});
+    const cc=clients[st.client]||clients[0];
+    const cd={...cc,upper:cc.name.toUpperCase(),pct:(cc.week/8*100)+'%',note:cc.credits<=1?'Pacchetto quasi esaurito: proponi il rinnovo.':'In linea con gli obiettivi del piano.',
+      sessions:[['Pilates Reformer','Ven 26 set'],['Personal Training','Mer 24 set'],['Pilates Reformer','Lun 22 set']].map(([name,when])=>({name,when})),
+      onRemind:()=>this.flash('Promemoria inviato a '+cc.name.split(' ')[0]),onPlan:()=>this.flash('Piano di '+cc.name.split(' ')[0]+' aggiornato')};
+    const setRole=r=>()=>{if(r===role)return;this.setState({role:r,tab:null,sheet:null});this.flash(r==='trainer'?'Modalità trainer attiva':'Modalità cliente attiva');};
+    return {n15:15,n16:16,n18:18,n20:20,n22:22,n30:30,n84:84,
+      isClient:role==='client',
+      isHome:tab==='home',isOrari:tab==='orari',isBookings:tab==='bookings',isProfile:tab==='profile',isPiano:tab==='piano',isNotifs:tab==='notifs',isToday:tab==='today',isClients:tab==='clients',isClientDetail:tab==='clientDetail',
+      goOrari:go('orari'),goBookings:go('bookings'),goPiano:go('piano'),goNotifs:()=>this.setState({tab:'notifs',prev:tab}),
+      goBack:()=>this.setState({tab:tab==='clientDetail'?'clients':(st.prev||null),prev:null}),
+      readAll:()=>{const r={...st.read};NOTIFS[role].forEach((_,i)=>r[role+i]=true);this.setState({read:r});},
+      notifs:nl,unread,hasUnread:unread>0,
+      call:()=>this.flash('Chiamata a 339 870 1308'),
+      showArc:this.props.showArc??true,showReview:this.props.showReview??true,five:5,
+      hasNext:!!n,noNext:!n,next:n?{name:n.name.toUpperCase(),day:DAYS[n.d].k.charAt(0)+DAYS[n.d].k.slice(1).toLowerCase()+' '+n.n,time:n.time,trainer:n.trainer}:{},
+      credits,creditsPct:(credits*10)+'%',creditsLabel:credits===0?'Pacchetto esaurito · rinnova in studio':credits<=2?'Stai per finire le lezioni · rinnova in studio':'Valido fino al 31 dicembre',
+      creditDots:Array.from({length:10},(_,k)=>({bg:k<credits?'#2486AB':'#D8ECF6'})),
+      preview:PLAN[0].slice(0,3).map(i=>this.row(ALL['0-'+SLOTS[i][0]])).map(r=>({...r,onOpen:()=>this.setState({tab:'orari',day:0,sheet:r.id})})),
+      days:DAYS.map((d,i)=>({...d,bg:i===st.day?'#2486AB':'#1A1D20',fg:'#fff',onPick:()=>this.setState({day:i})})),
+      filters:[['all','Tutti'],['reformer','Reformer'],['matwork','Matwork'],['yoga','Yoga']].map(([k,label])=>({label,active:st.filter===k,onPick:()=>this.setState({filter:k})})),
+      dayFull:DAYS[st.day].full,classes:dayClasses,emptyDay:dayClasses.length===0,mine,
+      exercises,exDoneN,exTotal:EX.length,exPct:(exDoneN/EX.length*100)+'%',exPctDeg:(exDoneN/EX.length*360)+'deg',
+      completeVariant:st.doneToday?'outline':'primary',completeLabel:st.doneToday?'Allenamento completato':'Completa allenamento',
+      completeWorkout:()=>{if(st.doneToday)return;const all={};EX.forEach((_,i)=>all[i]=true);this.setState(s=>({doneToday:true,ex:all,sessions:s.sessions+1}));this.flash('Allenamento registrato · ottimo lavoro');},
+      totalSessions:st.sessions,bars,
+      agenda,agendaSummary:agenda.length+' lezioni · '+ppl+' clienti',clients,cd,
+      prof:role==='trainer'?{init:'AN',name:'ANDREA',sub:'Personal trainer · Titolare'}:{init:'GR',name:'GIULIA ROSSI',sub:'Cliente dal 2025 · Pilates Reformer'},
+      roles:[['client','Cliente','user-round'],['trainer','Trainer','clipboard-list']].map(([k,label,icon])=>({label,icon,bg:role===k?'#2486AB':'transparent',fg:role===k?'#fff':'#BFC5C8',onPick:setRole(k)})),
+      services:[['Personal Training','Allenamento individuale, su misura per te','dumbbell'],['Fisioterapia','Valutazione e trattamento','activity'],['Osteopatia','Su appuntamento','hand'],['Nutrizione','Piano alimentare personalizzato','apple']].map(([name,sub,icon])=>({name,sub,icon,onPick:req(name)})),
+      tabs,sheetOpen:!!st.sheet,sheet,closeSheet:()=>this.setState({sheet:null}),hasToast:!!st.toast,toast:st.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

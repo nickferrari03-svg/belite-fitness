@@ -1,0 +1,6 @@
+:root{
+--shadow-card:0 10px 30px rgba(0,0,0,.35);--shadow-soft:0 4px 14px rgba(20,60,80,.18);
+--overlay-bottom:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.72) 100%);/* @kind other */
+--overlay-dark:rgba(0,0,0,.55);/* @kind color */
+--ease-out:cubic-bezier(.2,.7,.2,1);/* @kind other */--dur-fast:140ms;/* @kind other */--dur-base:240ms;/* @kind other */
+}

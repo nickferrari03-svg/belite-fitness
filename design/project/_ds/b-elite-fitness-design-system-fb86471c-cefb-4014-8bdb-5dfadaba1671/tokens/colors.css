@@ -1,0 +1,13 @@
+:root{
+/* Brand */
+--be-blue:#2486AB;--be-blue-600:#1E7194;--be-blue-700:#175A77;--be-blue-400:#3F9CC4;--be-blue-200:#A9D2E8;--be-blue-100:#D8ECF6;--be-blue-50:#EEF7FB;
+--be-sky:#1E9BE0;--be-lilac:#E7B6F0;
+/* Neutrals */
+--be-black:#000000;--be-ink:#0B0D0F;--be-graphite:#1A1D20;--be-slate:#283A3E;--be-gray-500:#6B7479;--be-gray-300:#BFC5C8;--be-gray-100:#EDEFF0;--be-concrete:#E6E4E1;--be-white:#FFFFFF;
+/* Semantic */
+--surface-page:var(--be-black);--surface-card:var(--be-graphite);--surface-inverse:var(--be-white);--surface-accent:var(--be-blue);--surface-accent-soft:var(--be-blue-100);
+--text-primary:var(--be-white);--text-secondary:var(--be-gray-300);--text-inverse:var(--be-ink);--text-accent:var(--be-blue);--text-on-accent:var(--be-white);
+--border-subtle:rgba(255,255,255,.14);--border-strong:var(--be-white);--border-accent:var(--be-blue);
+--class-reformer:var(--be-blue-200);--class-matwork:var(--be-blue-400);--class-yoga:var(--be-lilac);
+--success:#2E9E6A;--danger:#E0453A;--star:#F5F5F5;
+}
