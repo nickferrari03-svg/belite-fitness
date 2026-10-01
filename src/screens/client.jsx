@@ -25,7 +25,7 @@ export function Home({ v }) {
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
         <div>
           <div style={{ font: `400 26px/1 ${SERIF}`, fontStyle: 'italic', color: '#BFC5C8' }}>Ciao,</div>
-          <div style={{ font: `400 56px/.92 ${BEBAS}` }}>GIULIA</div>
+          <div style={{ font: `400 56px/.92 ${BEBAS}` }}>FRANCESCA</div>
         </div>
         <button onClick={v.goNotifs} aria-label="Notifiche" style={{ ...roundBtn, position: 'relative' }}>
           <Icon name="bell" size={20} color="#fff" />
@@ -289,9 +289,9 @@ export function Profilo({ v }) {
   return (
     <div style={page(26)}>
       <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-        <div style={{ width: 64, height: 64, borderRadius: 999, background: '#2486AB', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 30px/1 ${BEBAS}`, flex: 'none' }}>GR</div>
+        <div style={{ width: 64, height: 64, borderRadius: 999, background: '#2486AB', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 30px/1 ${BEBAS}`, flex: 'none' }}>FC</div>
         <div>
-          <div style={{ font: `400 36px/.95 ${BEBAS}` }}>GIULIA ROSSI</div>
+          <div style={{ font: `400 36px/.95 ${BEBAS}` }}>FRANCESCA CONTI</div>
           <div style={{ font: `500 13px ${MS}`, color: '#BFC5C8', marginTop: 4 }}>Cliente dal 2025</div>
         </div>
       </div>

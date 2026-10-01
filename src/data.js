@@ -10,7 +10,7 @@ PLAN.forEach((ix,d)=>ix.forEach(i=>{const c=cls(d,i);ALL[c.id]=c;}));
 export const LIB=[['Roll Up al Reformer','10'],['Plank con knee tuck','30 sec'],['Bridge su jumpboard','12'],['Side kick in serie','12 per lato'],['Stretching catena posteriore','5 min'],['Footwork al Reformer','12'],['Swan','8'],['Dead bug','10 per lato'],['Squat con elastico','15'],['Bird dog','10 per lato'],['Mermaid','6 per lato'],['Hundred','100 battute']];
 export const TIMES=['07:30','09:00','10:30','12:30','17:00','18:00','19:15','20:30'];
 export const ADD_TIMES=['07:00','08:30','11:00','14:00','17:00','21:00'];
-export const CLIENTS=[['Giulia Rossi','Tonificazione e postura',6,null],['Marco Bianchi','Forza funzionale',3,3],['Elena Ferri','Pilates Reformer',7,1],['Luca Moretti','Mobilità e schiena',2,7],['Sofia Galli','Post-parto',4,5]];
+export const CLIENTS=[['Francesca Conti','Tonificazione e postura',6,null],['Marco Bianchi','Forza funzionale',3,3],['Elena Ferri','Pilates Reformer',7,1],['Luca Moretti','Mobilità e schiena',2,7],['Sofia Galli','Post-parto',4,5]];
 export const POOL=['Marco B.','Elena F.','Luca M.','Sofia G.','Chiara V.'];
 export const MEAS=[['w','PESO','kg',0.1],['v','VITA','cm',0.5],['h','FIANCHI','cm',0.5]];
 export const TEAM=[['Andrea','Titolare · Personal trainer'],['Sara','Pilates Reformer e Matwork'],['Marta','Yoga']];

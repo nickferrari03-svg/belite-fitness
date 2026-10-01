@@ -15,7 +15,7 @@ Su desktop l'app è mostrata nella cornice iPhone del design; sotto i 500px di l
 Switch demo via URL (i "Tweaks" del prototipo): `?role=trainer`, `?credits=0`, `?offline=1`, `?race=0`.
 
 ## Stato
-- Dati e stato sono **locali e di esempio** (Giulia, clienti, Sara/Marta, orari, esercizi, regole). Nessun backend: si azzera al refresh.
+- Dati e stato sono **locali e di esempio** (cliente Francesca, altri clienti, Sara/Marta, orari, esercizi, regole). Nessun backend: si azzera al refresh.
 - Font self-hosted (Fontsource), nessuna chiamata a Google Fonts.
 - Logo a bassa risoluzione: serve il vettoriale (SVG/PDF/AI).
 

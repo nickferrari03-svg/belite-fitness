@@ -6,7 +6,7 @@ export class BeliteLogic extends Component {
   state={role:null,tab:null,sub:'piano',prev:null,day:0,filter:'all',sheet:null,booked:['0-12:30','2-18:00'],used:0,bonus:0,toast:null,
     done:{'Roll Up al Reformer':1,'Plank con knee tuck':1},sessions:23,doneToday:false,checkin:{},client:0,
     notifs:{client:[mk('bell-ring','Promemoria lezione','Pilates Reformer lunedì alle 12:30 con Andrea.','2 h',{tab:'home'}),mk('dumbbell','Piano aggiornato','Andrea ha aggiornato il tuo piano: settimana 6.','Ieri',{tab:'io',sub:'piano'}),mk('package','Il tuo pacchetto','Le tue lezioni sono valide fino al 31 dicembre.','3 g',{tab:'home'})],
-      trainer:[mk('user-plus','Nuova prenotazione','Giulia R. · Pilates Reformer, lunedì 12:30.','10 min',{tab:'agenda'}),mk('calendar-x','Cancellazione','Marco B. ha annullato Reformer martedì 07:30.','1 h',{tab:'agenda'}),mk('circle-alert','Pacchetto in esaurimento','Elena F. ha 1 lezione rimasta.','Ieri',{tab:'clientDetail',client:2})]},
+      trainer:[mk('user-plus','Nuova prenotazione','Francesca C. · Pilates Reformer, lunedì 12:30.','10 min',{tab:'agenda'}),mk('calendar-x','Cancellazione','Marco B. ha annullato Reformer martedì 07:30.','1 h',{tab:'agenda'}),mk('circle-alert','Pacchetto in esaurimento','Elena F. ha 1 lezione rimasta.','Ieri',{tab:'clientDetail',client:2})]},
     waitlist:[],offer:null,now:0,raced:{},raceUsed:false,pending:false,sheetErr:null,confirmCancel:false,
     cancelled:{},moved:{},added:[],addType:'reformer',addTime:'17:00',caps:{reformer:2,matwork:4,yoga:4},rules:{cancel:24,wait:30},q:'',cfilter:'all',
     plans:{},notes:{0:'Ottimo controllo nel Roll Up. Questa settimana aumentiamo la tenuta del plank.'},draft:[],draftNote:'',
@@ -39,9 +39,9 @@ export class BeliteLogic extends Component {
     this._p=setTimeout(()=>{const i=this.info(this.get(id));
       if((this.props.simulateRace??true)&&!this.state.raceUsed&&i.free===1){this.setState(s=>({pending:false,raceUsed:true,raced:Object.assign({},s.raced,{[id]:true}),sheetErr:'Qualcuno ti ha preceduto: il corso è appena diventato completo. Puoi entrare in lista d’attesa.'}));return;}
       this.setState(s=>({booked:s.booked.concat(id),used:s.used+1,sheet:null,pending:false}));this.flash('Prenotazione confermata');
-      this.push('trainer','user-plus','Nuova prenotazione','Giulia R. · '+i.name+', '+i.day+' '+i.dtime+'.',{tab:'agenda'});},700);}
+      this.push('trainer','user-plus','Nuova prenotazione','Francesca C. · '+i.name+', '+i.day+' '+i.dtime+'.',{tab:'agenda'});},700);}
   cancel(id){const i=this.info(this.get(id));this.setState(s=>({booked:s.booked.filter(b=>b!==id),used:s.used-1,sheet:null}));this.flash('Lezione annullata · credito restituito');
-    this.push('trainer','calendar-x','Cancellazione','Giulia R. ha annullato '+i.name+', '+i.day+' '+i.dtime+'.',{tab:'agenda'});}
+    this.push('trainer','calendar-x','Cancellazione','Francesca C. ha annullato '+i.name+', '+i.day+' '+i.dtime+'.',{tab:'agenda'});}
   wait(id){if(this.state.waitlist.includes(id)){this.setState(s=>({waitlist:s.waitlist.filter(w=>w!==id),sheet:null}));this.flash('Sei uscita dalla lista d’attesa');return;}
     this.setState(s=>({waitlist:s.waitlist.concat(id),sheet:null}));this.flash('Sei in lista d’attesa · ti avvisiamo noi');
     clearTimeout(this._w);this._w=setTimeout(()=>{const s=this.state;if(s.waitlist.includes(id)&&!s.offer){const i=this.info(this.get(id));const m=s.rules.wait;this.setState({offer:{id:id,end:Date.now()+m*60000},now:Date.now()});
@@ -82,7 +82,7 @@ export class BeliteLogic extends Component {
     const unread=st.notifs[role].filter(x=>!x.read).length;
     // trainer
     const agenda=this.dayList(0).filter(c=>c.trainer==='Andrea'&&!st.cancelled[c.id]).map(c=>{const i=this.info(c);const s=c.seed||0;
-      const names=(i.mine?['Giulia R.']:[]).concat(POOL.slice(s%3,s%3+i.taken-(i.mine?1:0)));
+      const names=(i.mine?['Francesca C.']:[]).concat(POOL.slice(s%3,s%3+i.taken-(i.mine?1:0)));
       const people=names.map(nm=>{const k=c.id+'|'+nm;const on=!!st.checkin[k];return Object.assign({name:nm,init:ini(nm),on:on,onToggle:()=>this.setState(x=>({checkin:Object.assign({},x.checkin,{[k]:!x.checkin[k]})}))},ck(on));});
       return Object.assign(i,{people:people,count:people.length,present:people.filter(p=>p.on).length,empty:!people.length});});
     const ppl=agenda.reduce((t,a)=>t+a.count,0);const pres=agenda.reduce((t,a)=>t+a.present,0);
@@ -182,7 +182,7 @@ export class BeliteLogic extends Component {
       services:[['Personal Training','Allenamento individuale, su misura per te','dumbbell'],['Fisioterapia','Valutazione e trattamento','activity'],['Osteopatia','Su appuntamento','hand'],['Nutrizione','Piano alimentare personalizzato','apple']].map(r=>({name:r[0],sub:r[1],icon:r[2],onPick:()=>this.flash('Richiesta '+r[0]+' inviata · ti ricontattiamo')})),
       renewOpts:[5,10,20].map(k=>{const on=st.renewPick===k;return Object.assign({n:k,onPick:()=>this.setState({renewPick:k}),border:on?'#2486AB':'rgba(255,255,255,.14)',bg:on?'rgba(36,134,171,.28)':'transparent'},ck(on));}),
       sendRenew:()=>{const k=st.renewPick;this.setState({renewReq:{pack:k},sheet:null});this.flash('Richiesta inviata ad Andrea');
-        this.push('trainer','package','Richiesta di rinnovo','Giulia R. chiede un pacchetto da '+k+' lezioni.',{tab:'clientDetail',client:0});},
+        this.push('trainer','package','Richiesta di rinnovo','Francesca C. chiede un pacchetto da '+k+' lezioni.',{tab:'clientDetail',client:0});},
       hasOffer:!tr&&!!st.offer,offer:oc?{name:oc.name.toUpperCase(),when:oc.day+' '+oc.dtime}:{},offerLeft:Math.floor(left/60000)+':'+String(Math.floor(left/1000)%60).padStart(2,'0'),
       acceptOffer:()=>{if(this.props.offline){this.flash('Sei offline · riprova tra poco');return;}if(credits<=0){this.flash('Pacchetto esaurito · richiedi il rinnovo');return;}const id=st.offer.id;
         this.setState(s=>({booked:s.booked.concat(id),used:s.used+1,waitlist:s.waitlist.filter(w=>w!==id),offer:null}));this.flash('Posto confermato · ci vediamo in studio');},
