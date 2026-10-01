@@ -1,7 +1,7 @@
 // Bottom sheets (class, renew, measures, manage class, new class) plus waitlist offer and toast.
 import { Icon, Button } from '../components/ds.jsx'
 import { Check, caps } from './client.jsx'
-import { Chip, SettingRow, Stepper } from './trainer.jsx'
+import { Chip, SettingRow, Stepper, Toggle } from './trainer.jsx'
 
 const MS = 'Montserrat,sans-serif'
 const BEBAS = "'Bebas Neue',sans-serif"
@@ -101,6 +101,8 @@ function MeasureSheet({ v }) {
 const outlineDark = { minHeight: 48, borderRadius: 999, border: '2px solid #0B0D0F', background: 'transparent', color: '#0B0D0F', font: `700 13px ${MS}`, letterSpacing: '.08em', textTransform: 'uppercase', cursor: 'pointer', padding: '0 18px', width: '100%' }
 const full = { width: '100%', justifyContent: 'center' }
 
+const pill = { minHeight: 40, padding: '0 14px', borderRadius: 999, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', font: `700 12px ${MS}`, cursor: 'pointer' }
+
 function Roster({ sh }) {
   const avatar = { width: 36, height: 36, borderRadius: 999, background: '#EEF7FB', display: 'flex', alignItems: 'center', justifyContent: 'center', font: `400 16px/1 ${BEBAS}`, flex: 'none' }
   const row = { display: 'flex', alignItems: 'center', gap: 12, minHeight: 52, borderBottom: '1px solid rgba(11,13,15,.08)' }
@@ -108,10 +110,27 @@ function Roster({ sh }) {
     <div style={col(8)}>
       <div style={caps('#6B7479')}>{sh.rosterLabel}</div>
       <div>
-        {sh.people.map(p => (
+        {sh.people.map(p => p.asking ? (
+          <div key={p.name} style={{ ...col(8), padding: '10px 0', borderBottom: '1px solid rgba(11,13,15,.08)' }}>
+            <div style={{ font: `600 14px/1.4 ${MS}` }}>{p.name} ha un posto fisso. Cosa vuoi rimuovere?</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <button onClick={p.onOnce} style={{ ...pill, background: '#EEF7FB', border: 0, color: '#1E7194' }}>Solo questa lezione</button>
+              <button onClick={p.onAll} style={{ ...pill, background: '#0B0D0F', border: 0, color: '#fff' }}>Tutte le settimane</button>
+              <button onClick={p.onKeep} style={pill}>Annulla</button>
+            </div>
+          </div>
+        ) : (
           <div key={p.name} style={row}>
             <div style={avatar}>{p.init}</div>
-            <span style={{ flex: 1, minWidth: 0, font: `600 14px ${MS}` }}>{p.name}{p.you && <span style={{ font: `500 12px ${MS}`, color: '#6B7479' }}> · dall’app</span>}</span>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ font: `600 14px ${MS}`, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
+              {(p.fixed || p.you) && (
+                <div style={{ display: 'flex', gap: 6, marginTop: 3, flexWrap: 'wrap' }}>
+                  {p.fixed && <span style={{ font: `700 10px ${MS}`, letterSpacing: '.08em', padding: '3px 8px', borderRadius: 999, background: '#2486AB', color: '#fff' }}>POSTO FISSO</span>}
+                  {p.you && <span style={{ font: `500 11px ${MS}`, color: '#6B7479' }}>prenotata dall’app</span>}
+                </div>
+              )}
+            </div>
             <button onClick={p.onRemove} aria-label={'Rimuovi ' + p.name} style={{ height: 36, padding: '0 12px', borderRadius: 999, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', font: `600 12px ${MS}`, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, flex: 'none' }}>
               <Icon name="x" size={14} color="#0B0D0F" />Rimuovi
             </button>
@@ -132,6 +151,13 @@ function Roster({ sh }) {
               <input autoFocus value={sh.addQ} onChange={sh.onAddQ} onKeyDown={e => { if (e.key === 'Enter' && sh.newName) sh.onAddNew() }} placeholder="Cerca o scrivi un nome" aria-label="Cerca cliente" style={{ flex: 1, minWidth: 0, border: 0, outline: 'none', background: 'transparent', font: `500 16px ${MS}`, color: '#0B0D0F' }} />
             </div>
             <button onClick={sh.onAddClose} aria-label="Chiudi ricerca" style={{ width: 44, height: 44, borderRadius: 999, border: 0, background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', flex: 'none' }}><Icon name="x" size={16} color="#0B0D0F" /></button>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '4px 4px 6px', borderBottom: '1px solid rgba(11,13,15,.08)' }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ font: `700 13px ${MS}` }}>Posto fisso</div>
+              <div style={{ font: `500 12px ${MS}`, color: '#6B7479', marginTop: 2 }}>{sh.repeatLabel}</div>
+            </div>
+            <Toggle on={sh.addRepeat} onToggle={sh.onToggleRepeat} label="Ripeti ogni settimana" />
           </div>
           {sh.candidates.map(c => (
             <button key={c.name} onClick={c.onPick} style={{ ...row, borderBottom: 0, width: '100%', padding: '0 4px', border: 0, background: 'none', color: '#0B0D0F', cursor: 'pointer', textAlign: 'left' }}>

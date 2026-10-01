@@ -99,6 +99,17 @@ export function Home({ v }) {
         </div>
       )}
 
+      {v.myFixed.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={caps('#BFC5C8')}>IL TUO POSTO FISSO</div>
+          {v.myFixed.map(f => (
+            <div key={f.id} style={{ borderRadius: 8, background: '#1A1D20', padding: '14px 16px', display: 'flex', alignItems: 'center', gap: 12, font: `600 14px ${MS}` }}>
+              <Icon name="calendar" size={18} color="#3F9CC4" />{f.text}
+            </div>
+          ))}
+        </div>
+      )}
+
       {v.hasWaits && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div style={caps('#BFC5C8')}>LISTA D’ATTESA</div>

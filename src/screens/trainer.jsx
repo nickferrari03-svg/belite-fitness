@@ -240,6 +240,21 @@ export function ClientDetail({ v }) {
         </div>
         <div style={{ font: `500 13px ${MS}`, color: '#6B7479' }}>{cd.note}</div>
       </div>
+      {cd.fixed.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={h2}>Posti fissi</div>
+          {cd.fixed.map(f => (
+            <div key={f.id} style={{ ...card12, padding: '12px 14px', display: 'flex', alignItems: 'center', gap: 12 }}>
+              <span style={{ width: 10, height: 10, borderRadius: 99, background: f.color, flex: 'none' }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ font: `700 14px ${MS}` }}>{f.name}</div>
+                <div style={muted}>{f.when}</div>
+              </div>
+              <button onClick={f.onRemove} style={{ height: 36, padding: '0 12px', borderRadius: 999, border: '1px solid rgba(11,13,15,.14)', background: '#fff', color: '#0B0D0F', font: `600 12px ${MS}`, cursor: 'pointer', flex: 'none' }}>Togli</button>
+            </div>
+          ))}
+        </div>
+      )}
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <div style={{ ...h2, marginBottom: 6 }}>Ultime sessioni</div>
         {cd.sessions.map(s => (
